@@ -1,7 +1,7 @@
 mindmaps.CanvasDrawingUtil = {
   /**
    * Calculates the width of a branch for a node for the given depth
-   * 
+   *
    * @param {Integer} depth the depth of the node
    * @returns {Number}
    */
@@ -46,14 +46,14 @@ mindmaps.CanvasDrawingUtil = {
 /**
  * Object that draws the line connection (the branch) between two nodes onto a
  * canvas object.
- * 
+ *
  * @constructor
  */
 mindmaps.CanvasBranchDrawer = function() {
   /**
    * Callback during render() method. Is called after calculating the
    * boundaries of the line and before actual drawing.
-   * 
+   *
    * @event
    */
   this.beforeDraw = function(width, height, left, top) {
@@ -62,7 +62,7 @@ mindmaps.CanvasBranchDrawer = function() {
 
   /**
    * Render that.
-   * 
+   *
    * @param {CanvasRenderingContext2D} ctx
    * @param {Integer} depth
    * @param {Number} offsetX
@@ -242,7 +242,7 @@ mindmaps.CanvasBranchDrawer = function() {
  * Utility module that calculates how much space a text would take up in a node.
  * This is done through a dummy div that has the same formatting as the node and
  * gets the text injected.
- * 
+ *
  */
 mindmaps.TextMetrics = (function() {
   var $div = $("<div/>", {
@@ -273,7 +273,7 @@ mindmaps.TextMetrics = (function() {
     /**
      * Calculates the width and height a node would have to provide to show
      * the text.
-     * 
+     *
      * @param {mindmaps.Node} node the node whose text is to be measured.
      * @param {mindmaps.Node} [text] use this instead of the text of node
      * @returns {Object} object with properties width and height.

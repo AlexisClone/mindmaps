@@ -4,13 +4,13 @@
 /**
  * Creates a new CanvasView. This is the base class for all canvas view
  * implementations.
- * 
+ *
  * @constructor
  */
 mindmaps.CanvasView = function() {
   /**
    * Returns the element that used to draw the map upon.
-   * 
+   *
    * @returns {jQuery}
    */
   this.$getDrawingArea = function() {
@@ -19,7 +19,7 @@ mindmaps.CanvasView = function() {
 
   /**
    * Returns the element that contains the drawing area.
-   * 
+   *
    * @returns {jQuery}
    */
   this.$getContainer = function() {
@@ -39,7 +39,7 @@ mindmaps.CanvasView = function() {
 
   /**
    * Scrolls the container.
-   * 
+   *
    * @param {Number} x
    * @param {Number} y
    */
@@ -91,7 +91,7 @@ mindmaps.CanvasView = function() {
 
   /**
    * Applies the new size according to current zoom factor.
-   * 
+   *
    * @param {Integer} width
    * @param {Integer} height
    */
@@ -105,7 +105,7 @@ mindmaps.CanvasView = function() {
 
   /**
    * Sets the new zoom factor and stores the delta to the old one.
-   * 
+   *
    * @param {Number} zoomFactor
    */
   this.setZoomFactor = function(zoomFactor) {
@@ -116,7 +116,7 @@ mindmaps.CanvasView = function() {
 
 /**
  * Should draw the mind map onto the drawing area.
- * 
+ *
  * @param {mindmaps.MindMap} map
  */
 mindmaps.CanvasView.prototype.drawMap = function(map) {
@@ -126,7 +126,7 @@ mindmaps.CanvasView.prototype.drawMap = function(map) {
 /**
  * Creates a new DefaultCanvasView. This is the reference implementation for
  * drawing mind maps.
- * 
+ *
  * @extends mindmaps.CanvasView
  * @constructor
  */
@@ -256,7 +256,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Calculates the width of a branch for a node for the given depth
-   * 
+   *
    * @param {Integer} depth the depth of the node
    * @returns {Number}
    */
@@ -298,7 +298,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Inserts a new node including all of its children into the DOM.
-   * 
+   *
    * @param {mindmaps.Node} node - The model of the node.
    * @param {jQuery} [$parent] - optional jquery parent object the new node is
    *            appended to. Usually the parent node. If argument is omitted,
@@ -444,7 +444,7 @@ mindmaps.DefaultCanvasView = function() {
   /**
    * Removes a node from the view and with it all its children and the branch
    * leading to the parent.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.deleteNode = function(node) {
@@ -458,7 +458,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Highlights a node to show that it is selected.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.highlightNode = function(node) {
@@ -468,7 +468,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Removes the hightlight of a node.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.unhighlightNode = function(node) {
@@ -478,7 +478,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Hides all children of a node.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.closeNode = function(node) {
@@ -491,7 +491,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Shows all children of a node.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.openNode = function(node) {
@@ -504,7 +504,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Creates the fold button for a node that shows/hides its children.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.createFoldButton = function(node) {
@@ -531,7 +531,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Removes the fold button.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.removeFoldButton = function(node) {
@@ -543,7 +543,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Goes into edit mode for a node.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.editNodeCaption = function(node) {
@@ -559,7 +559,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Updates the text caption for a node.
-   * 
+   *
    * @param {mindmaps.Node} node
    * @param {String} value
    */
@@ -571,7 +571,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Get a reference to the creator tool.
-   * 
+   *
    * @returns {Creator}
    */
   this.getCreator = function() {
@@ -580,7 +580,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Returns whether a node is currently being dragged.
-   * 
+   *
    * @returns {Boolean}
    */
   this.isNodeDragging = function() {
@@ -589,7 +589,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Redraws a node's branch to its parent.
-   * 
+   *
    * @param {mindmaps.Node} node
    * @param {String} optional color
    */
@@ -609,7 +609,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Redraws all branches that a node is connected to.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.redrawNodeConnectors = function(node) {
@@ -633,7 +633,7 @@ mindmaps.DefaultCanvasView = function() {
   this.updateBranchColor = function(node, color) {
     var $node = $getNode(node);
     $node.css("border-bottom-color", color);
-    
+
     // redraw canvas to parent
     if (!node.isRoot()) {
       drawNodeCanvas(node, color);
@@ -650,7 +650,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Does a complete visual update of a node to reflect all of its attributes.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.updateNode = function(node) {
@@ -676,7 +676,7 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * Moves the node a new position.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.positionNode = function(node) {
@@ -752,7 +752,7 @@ mindmaps.DefaultCanvasView = function() {
   /**
    * Creates a new CaptionEditor. This tool offers an inline editor component
    * to change a node's caption.
-   * 
+   *
    * @constructor
    * @param {mindmaps.CanvasView} view
    */
@@ -799,7 +799,7 @@ mindmaps.DefaultCanvasView = function() {
     /**
      * Attaches the textarea to the node and temporarily removes the
      * original node caption.
-     * 
+     *
      * @param {mindmaps.Node} node
      * @param {jQuery} $cancelArea
      */
@@ -855,7 +855,7 @@ mindmaps.DefaultCanvasView = function() {
   /**
    * Creates a new Creator. This tool is used to drag out new branches to
    * create new nodes.
-   * 
+   *
    * @constructor
    * @param {mindmaps.CanvasView} view
    * @returns {Creator}
@@ -927,8 +927,7 @@ mindmaps.DefaultCanvasView = function() {
           var nubLeft = ui.position.left / view.zoomFactor;
           var nubTop = ui.position.top / view.zoomFactor;
 
-          var distance = mindmaps.Util.distance($wpLeft - nubLeft,
-              $wpTop - nubTop);
+          var distance = mindmaps.Util.distance($wpLeft - nubLeft, $wpTop - nubTop);
           self.dragStopped(self.node, nubLeft, nubTop, distance);
         }
 
@@ -942,7 +941,7 @@ mindmaps.DefaultCanvasView = function() {
 
     /**
      * Attaches the tool to a node.
-     * 
+     *
      * @param {mindmaps.Node} node
      */
     this.attachToNode = function(node) {
@@ -978,7 +977,7 @@ mindmaps.DefaultCanvasView = function() {
 
     /**
      * Returns whether the tool is currently in use being dragged.
-     * 
+     *
      * @returns {Boolean}
      */
     this.isDragging = function() {

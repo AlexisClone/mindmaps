@@ -1,7 +1,7 @@
 /**
  * Creates a new CanvasPresenter. The canvas presenter is responsible for drawing the mind map onto a
  * canvas view and reacting to user input on the map (e.g. dragging a node, double clicking it etc.)
- * 
+ *
  * @constructor
  * @param {mindmaps.EventBus} eventBus
  * @param {mindmaps.CommandRegistry} commandRegistry
@@ -29,7 +29,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * Handles the edit caption command. Tells view to start edit mode for node.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   this.editNodeCaption = function(node) {
@@ -41,7 +41,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * Toggles the fold state of a node.
-   * 
+   *
    * @param {mindmaps.Node} node
    */
   var toggleFold = function(node) {
@@ -56,7 +56,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * Tells the view to select a node.
-   * 
+   *
    * @param {mindmaps.Node} selectedNode
    * @param {mindmaps.Node} oldSelectedNode
    */
@@ -72,7 +72,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
   // listen to events from view
   /**
    * View callback: Zoom on mouse wheel.
-   * 
+   *
    * @ignore
    */
   view.mouseWheeled = function(delta) {
@@ -87,7 +87,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Attach creator to node if mouse hovers over node.
-   * 
+   *
    * @ignore
    */
   view.nodeMouseOver = function(node) {
@@ -100,7 +100,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Attach creator to node if mouse hovers over node caption.
-   * 
+   *
    * @ignore
    */
   view.nodeCaptionMouseOver = function(node) {
@@ -113,7 +113,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Select node if mouse was pressed.
-   * 
+   *
    * @ignore
    */
   view.nodeMouseDown = function(node) {
@@ -127,7 +127,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Go into edit mode when node was double clicked.
-   * 
+   *
    * @ignore
    */
   view.nodeDoubleClicked = function(node) {
@@ -139,7 +139,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Execute MoveNodeAction when node was dragged.
-   * 
+   *
    * @ignore
    */
   view.nodeDragged = function(node, offset) {
@@ -152,7 +152,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Toggle fold mode when fold button was clicked.
-   * 
+   *
    * @ignore
    */
   view.foldButtonClicked = function(node) {
@@ -163,7 +163,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
   /**
    * View callback: Return new random color to view when creator tool was
    * started to drag.
-   * 
+   *
    * @ignore
    */
   creator.dragStarted = function(node) {
@@ -175,7 +175,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * View callback: Create a new node when creator tool was stopped.
-   * 
+   *
    * @ignore
    */
   creator.dragStopped = function(parent, offsetX, offsetY, distance) {
@@ -184,20 +184,26 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       return;
     }
 
-    // update the model
-    var node = new mindmaps.Node();
-    node.branchColor = creator.lineColor;
-    node.offset = new mindmaps.Point(offsetX, offsetY);
-    // indicate that we want to set this nodes caption after creation
-    node.shouldEditCaption = true;
+    if (true){
+      // update the model
+      var node = new mindmaps.Node();
+      node.branchColor = creator.lineColor;
+      node.offset = new mindmaps.Point(offsetX, offsetY);
+      // indicate that we want to set this nodes caption after creation
+      node.shouldEditCaption = true;
 
-    mindmapModel.createNode(node, parent);
+      mindmapModel.createNode(node, parent);
+    } else {
+      //var node = the targeted node
+
+      mindmapModel.createSymbolicLink(parent, node);
+    }
   };
 
   /**
    * View callback: Change node caption when text change was committed in
    * view.
-   * 
+   *
    * @ignore
    * @param {mindmaps.Node} node
    * @param {String} str
@@ -219,7 +225,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
   /**
    * Draw the mind map on the canvas.
-   * 
+   *
    * @param {mindmaps.Document} doc
    */
   function showMindMap(doc) {
@@ -304,7 +310,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_SELECTED, selectNode);
-    
+
     eventBus.subscribe(mindmaps.Event.NODE_OPENED, function(node) {
       view.openNode(node);
     });
@@ -325,7 +331,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         node) {
       view.updateNode(node);
     });
-    
+
     eventBus.subscribe(mindmaps.Event.NODE_BRANCH_COLOR_PREVIEW, function(node, color) {
       view.updateBranchColor(node, color)
     });
