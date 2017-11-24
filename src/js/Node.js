@@ -1,9 +1,11 @@
 /**
  * Creates a new node.
- * 
+ *
  * @constructor
  */
 mindmaps.Node = function() {
+  //Modifié
+  this.symbolicLink = {};
   this.id = mindmaps.Util.getId();
   this.parent = null;
   this.children = new mindmaps.NodeMap();
@@ -23,9 +25,15 @@ mindmaps.Node = function() {
   this.branchColor = "#000000";
 };
 
+//Modifié
+mindmaps.Node.prototype.addSymbolicLink = function(nodeId) {
+
+}
+
+
 /**
  * Creates a deep copy of this node, where all nodes have a new IDs.
- * 
+ *
  * @returns {mindmaps.Node} the cloned node
  */
 mindmaps.Node.prototype.clone = function() {
@@ -56,7 +64,7 @@ mindmaps.Node.prototype.clone = function() {
 
 /**
  * Creates a new node object from JSON String.
- * 
+ *
  * @param {String} json
  * @returns {mindmaps.Node}
  */
@@ -66,7 +74,7 @@ mindmaps.Node.fromJSON = function(json) {
 
 /**
  * Creates a new node object from a generic object.
- * 
+ *
  * @param {Object} obj
  * @returns {mindmaps.Node}
  */
@@ -90,7 +98,7 @@ mindmaps.Node.fromObject = function(obj) {
 /**
  * Returns a presentation of this node and its children ready for serialization.
  * Called by JSON.stringify().
- * 
+ *
  * @private
  */
 mindmaps.Node.prototype.toJSON = function() {
@@ -122,7 +130,7 @@ mindmaps.Node.prototype.toJSON = function() {
 
 /**
  * Creates a JSON representation of the node.
- * 
+ *
  * @returns {String}
  */
 mindmaps.Node.prototype.serialize = function() {
@@ -131,7 +139,7 @@ mindmaps.Node.prototype.serialize = function() {
 
 /**
  * Adds a child to the node.
- * 
+ *
  * @param {mindmaps.Node} node
  */
 mindmaps.Node.prototype.addChild = function(node) {
@@ -141,7 +149,7 @@ mindmaps.Node.prototype.addChild = function(node) {
 
 /**
  * Removes a direct child.
- * 
+ *
  * @param {mindmaps.Node} node
  */
 mindmaps.Node.prototype.removeChild = function(node) {
@@ -151,7 +159,7 @@ mindmaps.Node.prototype.removeChild = function(node) {
 
 /**
  * Returns whether this node is a root.
- * 
+ *
  * @returns {Boolean}
  */
 mindmaps.Node.prototype.isRoot = function() {
@@ -160,7 +168,7 @@ mindmaps.Node.prototype.isRoot = function() {
 
 /**
  * Returns whether this node is a leaf.
- * 
+ *
  * @returns {Boolean}
  */
 mindmaps.Node.prototype.isLeaf = function() {
@@ -169,7 +177,7 @@ mindmaps.Node.prototype.isLeaf = function() {
 
 /**
  * Returns the parent node.
- * 
+ *
  * @returns {mindmaps.Node}
  */
 mindmaps.Node.prototype.getParent = function() {
@@ -179,7 +187,7 @@ mindmaps.Node.prototype.getParent = function() {
 /**
  * Returns the root if this node is part of a tree structure, otherwise it
  * returns itself.
- * 
+ *
  * @returns {mindmaps.Node} The root of the tree structure.
  */
 mindmaps.Node.prototype.getRoot = function() {
@@ -193,7 +201,7 @@ mindmaps.Node.prototype.getRoot = function() {
 
 /**
  * Gets the position of the node relative to the root.
- * 
+ *
  * @returns {mindmaps.Point}
  */
 mindmaps.Node.prototype.getPosition = function() {
@@ -209,7 +217,7 @@ mindmaps.Node.prototype.getPosition = function() {
 
 /**
  * Gets the depth of the node. Root has a depth of 0.
- * 
+ *
  * @returns {Number}
  */
 mindmaps.Node.prototype.getDepth = function() {
@@ -227,7 +235,7 @@ mindmaps.Node.prototype.getDepth = function() {
 /**
  * Gets the children of the node. Traverses the whole sub tree if recursive is
  * true.
- * 
+ *
  * @param recursive
  * @returns {Array}
  * @deprecated
@@ -250,7 +258,7 @@ mindmaps.Node.prototype.getChildren = function(recursive) {
 
 /**
  * Iterator. Traverses all child nodes.
- * 
+ *
  * @param {Function} func
  */
 mindmaps.Node.prototype.forEachChild = function(func) {
@@ -259,7 +267,7 @@ mindmaps.Node.prototype.forEachChild = function(func) {
 
 /**
  * Iterator. Traverses all child nodes recursively.
- * 
+ *
  * @param {Function} func
  */
 mindmaps.Node.prototype.forEachDescendant = function(func) {
@@ -271,7 +279,7 @@ mindmaps.Node.prototype.forEachDescendant = function(func) {
 
 /**
  * Sets the caption for the node
- * 
+ *
  * @param {String} caption
  */
 mindmaps.Node.prototype.setCaption = function(caption) {
@@ -280,7 +288,7 @@ mindmaps.Node.prototype.setCaption = function(caption) {
 
 /**
  * Gets the caption for the node.
- * 
+ *
  * @returns {String}
  */
 mindmaps.Node.prototype.getCaption = function() {
@@ -289,7 +297,7 @@ mindmaps.Node.prototype.getCaption = function() {
 
 /**
  * Tests (depth-first) whether the other node is a descendant of this node.
- * 
+ *
  * @param {mindmaps.Node} other
  * @returns {Boolean} true if descendant, false otherwise.
  */

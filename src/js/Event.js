@@ -1,9 +1,12 @@
 /**
  * Events that the event bus carries.
- * 
+ *
  * @namespace
  */
 mindmaps.Event = {
+  //Modifié
+  SYMBOLIC_LINK_CREATED : "SymbolicLinkCreated",
+
   /**
    * @event
    * @param {mindmaps.Document} document
@@ -49,7 +52,7 @@ mindmaps.Event = {
 
   /**
    * Some parameter of the node font attribute has changed.
-   * 
+   *
    * @event
    * @param {mindmaps.Node} node
    */
@@ -107,19 +110,19 @@ mindmaps.Event = {
    * @param {Number} zoomFactor
    */
   ZOOM_CHANGED : "ZoomChangedEvent",
-  
+
   /**
    * @event
    * @param {String} message
    */
   NOTIFICATION_INFO: "NotificationInfoEvent",
-  
+
   /**
    * @event
    * @param {String} message
    */
   NOTIFICATION_WARN: "NotificationWarnEvent",
-  
+
   /**
    * @event
    * @param {String} message
@@ -129,10 +132,10 @@ mindmaps.Event = {
 
 /**
  * Simple Event bus powered by EventEmitter.
- * 
+ *
  * @constructor
  * @augments EventEmitter
- * 
+ *
  */
 mindmaps.EventBus = EventEmitter;
 
