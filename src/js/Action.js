@@ -5,7 +5,7 @@ mindmaps.action = {};
 
 /**
  * Creates a new action.
- * 
+ *
  * @constructor
  */
 mindmaps.action.Action = function() {
@@ -14,7 +14,7 @@ mindmaps.action.Action = function() {
 mindmaps.action.Action.prototype = {
   /**
    * Make this action un-undoable.
-   * 
+   *
    * @returns {Action}
    */
   noUndo : function() {
@@ -25,7 +25,7 @@ mindmaps.action.Action.prototype = {
 
   /**
    * Don't emit an event after execution.
-   * 
+   *
    * @returns {Action}
    */
   noEvent : function() {
@@ -36,7 +36,7 @@ mindmaps.action.Action.prototype = {
   /**
    * Executes this action. Explicitly returning false will cancel this action
    * and not raise an event or undoable action.
-   * 
+   *
    */
   execute : function() {
   },
@@ -46,9 +46,20 @@ mindmaps.action.Action.prototype = {
   }
 };
 
+//Modifié
+mindmaps.action.CreateSymbolicLink = function(parent, node) {
+  var nodeId = node.id;
+
+  this.execute = function(){
+    parent.addSymbolicLink(nodeId);
+  };
+
+  this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent ];
+};
+
 /**
  * Creates a new MoveNodeAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -70,7 +81,7 @@ mindmaps.action.MoveNodeAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new DeleteNodeAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -95,7 +106,7 @@ mindmaps.action.DeleteNodeAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new CreateAutoPositionedNodeAction.
- * 
+ *
  * @constructor
  * @param {mindmaps.Node} parent
  * @param {mindmaps.MindMap} mindmap
@@ -137,7 +148,7 @@ mindmaps.action.CreateAutoPositionedNodeAction = function(parent, mindmap) {
 
 /**
  * Creates a new CreateNodeAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -159,8 +170,8 @@ mindmaps.action.CreateNodeAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new ToggleNodeFoldAction.
- * 
- * 
+ *
+ *
  * @constructor
  * @param {mindmaps.Node} node
  * @returns {Action}
@@ -175,7 +186,7 @@ mindmaps.action.ToggleNodeFoldAction = function(node) {
 
 /**
  * Creates a new OpenNodeAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -192,7 +203,7 @@ mindmaps.action.OpenNodeAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new CloseNodeAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -209,7 +220,7 @@ mindmaps.action.CloseNodeAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new ChangeNodeCaptionAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -235,7 +246,7 @@ mindmaps.action.ChangeNodeCaptionAction.prototype = new mindmaps.action.Action()
 
 /**
  * Creates a new ChageNodeFontSizeAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -273,7 +284,7 @@ mindmaps.action.IncreaseNodeFontSizeAction = function(node) {
 
 /**
  * Creates a new SetFontWeightAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -294,7 +305,7 @@ mindmaps.action.SetFontWeightAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new SetFontStyleAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -316,7 +327,7 @@ mindmaps.action.SetFontStyleAction.prototype = new mindmaps.action.Action();
 /**
  * Creates a new SetFontDecorationAction. Possible styles: "none", "underline",
  * "line-through".
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -337,7 +348,7 @@ mindmaps.action.SetFontDecorationAction.prototype = new mindmaps.action.Action()
 
 /**
  * Creates a new SetFontColorAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -358,7 +369,7 @@ mindmaps.action.SetFontColorAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new SetBranchColorAction.
- * 
+ *
  * @constructor
  * @augments mindmaps.action.Action
  * @param {mindmaps.Node} node
@@ -409,7 +420,7 @@ mindmaps.action.SetChildrenBranchColorAction = function(node) {
   var self = this;
 
   node.forEachDescendant(function(desc) {
-    self.addAction(new mindmaps.action.SetBranchColorAction(desc, branchColor)); 
+    self.addAction(new mindmaps.action.SetBranchColorAction(desc, branchColor));
   });
 }
 mindmaps.action.SetChildrenBranchColorAction.prototype = new mindmaps.action.CompositeAction();
