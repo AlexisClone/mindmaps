@@ -184,7 +184,16 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       return;
     }
 
-    if (true){
+    var nearOther = false;
+    var tempNode = parent.getRoot();
+    console.log(tempNode.isNearOther(offsetX, offsetY));
+    if (tempNode.isNearOther(offsetX, offsetY) != null){
+      nearOther = true;
+    }
+
+
+
+    if (!nearOther){
       // update the model
       var node = new mindmaps.Node();
       node.branchColor = creator.lineColor;
@@ -195,8 +204,8 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       mindmapModel.createNode(node, parent);
     } else {
       //var node = the targeted node
-
-      mindmapModel.createSymbolicLink(parent, node);
+      console.log("la aussi");
+      //mindmapModel.createSymbolicLink(parent, node);
     }
   };
 
