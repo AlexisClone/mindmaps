@@ -6,6 +6,7 @@
 mindmaps.Node = function() {
   //Modifié
   this.symbolicLink = {};
+
   this.id = mindmaps.Util.getId();
   this.parent = null;
   this.children = new mindmaps.NodeMap();
@@ -27,8 +28,8 @@ mindmaps.Node = function() {
 
 //Modifié
 mindmaps.Node.prototype.addSymbolicLink = function(nodeId) {
-
-}
+  this.symbolicLink.push(nodeId);
+};
 
 //mindmaps.Util.distance(this.getPosition().x - offsetX, this.getPosition().y - offsetY) < 50
 mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
