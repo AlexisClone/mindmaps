@@ -47,6 +47,13 @@ mindmaps.action.Action.prototype = {
 };
 
 //Modifié
+/**
+ *Creates a new link between two existant nodes
+ *
+ * @argument mandmaps.action.action
+ * @param {mindmaps.Node} parent the node from where the link is created
+ * @param {mindmaps.Node} node the node targeted by the link
+ */
 mindmaps.action.CreateSymbolicLink = function(parent, node) {
   var nodeId = node.id;
 
