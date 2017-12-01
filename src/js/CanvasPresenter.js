@@ -183,11 +183,13 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     if (distance < 50) {
       return;
     }
-
+    // we calculate the position relatively from the root
+    var pos = new mindmaps.Point(offsetX, offsetY);
+    pos.add(parent.getPosition());
+    //if the creator is in a 50px radius of an other node, we create a link, else we create a node
     var nearOther = false;
     var tempNode = parent.getRoot();
-    console.log(tempNode.isNearOther(offsetX, offsetY));
-    if (tempNode.isNearOther(offsetX, offsetY) != null){
+    if (tempNode.isNearOther(pos.x, pos.y) != null){
       nearOther = true;
     }
 
@@ -204,7 +206,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       mindmapModel.createNode(node, parent);
     } else {
       //var node = the targeted node
-      console.log("la aussi");
+      console.log("on crée un lien");
       //mindmapModel.createSymbolicLink(parent, node);
     }
   };

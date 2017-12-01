@@ -34,21 +34,18 @@ mindmaps.Node.prototype.addSymbolicLink = function(nodeId) {
 //mindmaps.Util.distance(this.getPosition().x - offsetX, this.getPosition().y - offsetY) < 50
 mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
   var listnoeud = [];
+  listnoeud.push(this);
   this.forEachDescendant(function(node){
     listnoeud.push(node);
   });
-  console.log(listnoeud);
-
   for (var i= 0; i < listnoeud.length; i++){
-    console.log(i);
-    console.log(mindmaps.Util.distance(listnoeud[i].getPosition().x - offsetX, listnoeud[i].getPosition().y - offsetY));
     if (mindmaps.Util.distance(listnoeud[i].getPosition().x - offsetX, listnoeud[i].getPosition().y - offsetY) < 50){
-      console.log("MAINTENANT");
       return listnoeud[i];
     }
   }
   return  null;
 }
+
 
 /**
  * Creates a deep copy of this node, where all nodes have a new IDs.
