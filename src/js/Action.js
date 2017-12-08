@@ -62,7 +62,7 @@ mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
   this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent ];
 
   this.undo = function(){
-    return new mindmaps.action.DeleteSymbolicLinkAction(node, oldOffset);
+    return new mindmaps.action.DeleteSymbolicLinkAction(parent, node);
   };
 
 };
@@ -77,7 +77,7 @@ mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
   this.event = [ mindmaps.Event.SYMBOLIC_LINK_DELETED, parent ];
 
   this.undo = function(){
-    return new mindmaps.action.CreateSymbolicLinkAction(node, oldOffset);
+    return new mindmaps.action.CreateSymbolicLinkAction(parent, node);
   };
 
 };
