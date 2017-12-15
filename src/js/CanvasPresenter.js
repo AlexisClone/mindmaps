@@ -207,7 +207,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     } else {
       //var node = the targeted node
       console.log("on crée un lien");
-      //mindmapModel.createSymbolicLink(parent, node);
+      mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
     }
   };
 
@@ -303,6 +303,12 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         creator.attachToNode(node);
         view.editNodeCaption(node);
       }
+    });
+
+    eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
+      var depth = parent.getDepth();
+      console.log("subscribe : "+parent.getSymbolicLinks().length);
+      view.createLink(depth, parent, node);
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {

@@ -54,14 +54,15 @@ mindmaps.action.Action.prototype = {
  * @param {mindmaps.Node} parent the node from where the link is created
  * @param {mindmaps.Node} node the node targeted by the link
  */
-mindmaps.action.CreateSymbolicLink = function(parent, node) {
-  var nodeId = node.id;
+mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
+
+  //TODO undo()
 
   this.execute = function(){
-    parent.addSymbolicLink(nodeId);
+    parent.addSymbolicLink(node);
   };
 
-  this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent ];
+  this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent, node ];
 };
 
 /**

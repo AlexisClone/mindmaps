@@ -1,6 +1,6 @@
 /**
  * Creates a new Application Controller.
- * 
+ *
  * @constructor
  */
 mindmaps.ApplicationController = function() {
