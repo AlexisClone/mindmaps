@@ -69,11 +69,13 @@ mindmaps.CanvasBranchDrawer = function() {
     ctx.lineWidth=5;
     ctx.strokeStyle = color;
     ctx.beginPath();
-    ctx.moveTo(parent.offsetX, parent.offsetY);
+    ctx.moveTo(0, 0);
+
     console.log(parent.getPosition().x+", "+parent.getPosition().y+"\n"+
                 (parent.getPosition().x+100)+", "+(parent.getPosition().y+100)+"\n"+
                 node.getPosition().x+", "+node.getPosition().y);
-    ctx.bezierCurveTo(parent.getPosition().x, parent.getPosition().y, parent.getPosition().x+100, parent.getPosition().y+100, node.getPosition().x, node.getPosition().y);
+
+    ctx.bezierCurveTo(0, 0, 100, 100, node.getPosition().x-parent.getPosition().x, node.getPosition().y-parent.getPosition().y);
 
     ctx.stroke();
   };

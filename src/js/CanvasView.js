@@ -177,6 +177,10 @@ mindmaps.DefaultCanvasView = function() {
     return $("#node-caption-" + node.id);
   }
 
+  function $getLinkCanvas(node, id){
+    return $("#node-canvasLink-"+id+"-"+node.id);
+  }
+
   function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color) {
     var canvas = $canvas[0];
     var ctx = canvas.getContext("2d");
@@ -187,15 +191,15 @@ mindmaps.DefaultCanvasView = function() {
         color, self.zoomFactor);
   }
 
-  function drawLinkCanvas($canvas, depth, parent, node){
+  function drawLinkCanvas($canvas, depth, $parent, $node){
     var canvas = $canvas[0];
     var ctx = canvas.getContext("2d");
     var color = "#A9A9A9";
 
     branchDrawer.$canvas = $canvas;
-    console.log(parent);
-    console.log(node);
-    branchDrawer.renderLink(ctx, depth, parent, node, color, self.zoomFactor);
+    console.log($parent);
+    console.log($node);
+    branchDrawer.renderLink(ctx, depth, $parent, $node, color, self.zoomFactor);
   }
 
   this.init = function() {
@@ -640,6 +644,22 @@ mindmaps.DefaultCanvasView = function() {
     var $canvas = $getNodeCanvas(node);
 
     drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color);
+
+    console.log("la réponse est ...");
+    if (node.symbolicLink.length != 0){
+      console.log("oui");
+      console.log(node.symbolicLink.length);
+      $parent = $getNode(node);
+      offsetPX = node.getPosition().x;
+      offsetPY = node.getPosition().y;
+      for (var i = 0; i < node.symbolicLink.length; i++){
+        $canvas = $getLinkCanvas(node, i);
+        $node = $getNode(node.symbolicLink[i]);
+        offsetNX = node.symbolicLink[i].getPosition().x;
+        offsetNY = node.symbolicLink[i].getPosition().y;
+        drawLinkCanvas($canvas, dept, $parent, $node, /*offsetPX, offsetPY, offsetNX, offsetNY*/);
+      }
+    }
   }
 
   /**
