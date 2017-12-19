@@ -206,8 +206,11 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       mindmapModel.createNode(node, parent);
     } else {
       //var node = the targeted node
-      console.log("on crée un lien");
-      //mindmapModel.createSymbolicLink(parent, node);
+      console.log("on crée un lien 1111");
+      console.log("ok");
+      mindmapModel.createSymbolicLink(parent, parent.isNearOther(offsetX, offsetY));
+
+      console.log("ok");
     }
   };
 

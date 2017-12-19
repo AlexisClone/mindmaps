@@ -5,7 +5,7 @@
  */
 mindmaps.Node = function() {
   //Modifié
-  this.symbolicLink = {};
+  this.symbolicLink = [];
 
   this.id = mindmaps.Util.getId();
   this.parent = null;
@@ -47,8 +47,8 @@ mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
       return listnoeud[i];
     }
   }
-  return  null;
-}
+  return null;
+};
 
 
 /**
