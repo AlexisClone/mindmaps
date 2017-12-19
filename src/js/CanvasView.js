@@ -187,15 +187,15 @@ mindmaps.DefaultCanvasView = function() {
         color, self.zoomFactor);
   }
 
-  function drawLinkCanvas($canvas, depth, parent, node){
-    var canvas = $canvas[0];
-    var ctx = canvas.getContext("2d");
-    var color = "#A9A9A9";
-
-    branchDrawer.$canvas = $canvas;
+  function drawLinkCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color){
     console.log(parent);
     console.log(node);
-    branchDrawer.renderLink(ctx, depth, parent, node, color, self.zoomFactor);
+    
+    var canvas = $canvas[0];
+    var ctx = canvas.getContext("2d");
+
+    branchDrawer.$canvas = $canvas;
+    branchDrawer.renderLink(ctx, depth, offsetX, offsetY, $node, $parent, color, self.zoomFactor);
   }
 
   this.init = function() {
@@ -314,14 +314,21 @@ mindmaps.DefaultCanvasView = function() {
    * @param {mindmaps.Node} [node] - the targeted node
    */
   this.createLink = function (depth, parent, node){
-    if (parent.getSymbolicLinks().length != 0){
+    if (parent.getSymbolicLinks().length != 0){ // vraiment utile ? cette fonction s'execute lors de la creation de link, donc il en existe forcement un (interférences ??)
       var number = parent.getSymbolicLinks().length-1;
       var $canvasLink = $("<canvas/>", {
         id : "node-canvasLink-" + number + "-" + parent.id,
         "class" : "line-canvas"
       });
 
-      drawLinkCanvas($canvasLink, depth, parent, /*parent.getSymbolicLinks()[parent.getSymbolicLinks().length-1]*/ node);
+      var $parent = $getNode(parent);
+      var $node = $getNode(node);
+      var color = "#A9A9A9";
+
+      var offsetX = parent.offset.x; //ou node ? (cf this.createNode)
+      var offsetY = parent.offset.y; //ou node ?
+
+      drawLinkCanvas($canvasLink, depth, offsetX, offsetY, $node, $parent, color);
       console.log($canvasLink);
       console.log(parent);
       console.log("#node-" + parent.id);

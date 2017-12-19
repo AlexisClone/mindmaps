@@ -51,11 +51,7 @@ mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
       return listnoeud[i];
     }
   }
-<<<<<<< HEAD
-  return null;
-=======
   return  null;
->>>>>>> 3fa4b3ca9ec63ed8ff5ff1c6f9769010220aeac6
 };
 
 

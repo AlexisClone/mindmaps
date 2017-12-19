@@ -68,6 +68,7 @@ mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
 };
 mindmaps.action.CreateSymbolicLinkAction.prototype = new mindmaps.action.Action();
 
+
 mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
 
   this.execute = function(){
