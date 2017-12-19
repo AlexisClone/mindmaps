@@ -61,21 +61,27 @@ mindmaps.CanvasBranchDrawer = function() {
   };
 
 
+  this.renderLink = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor){
 
-  this.renderLink = function(ctx, depth, parent, node, color, zoomFactor){
-    ctx.font="20px Georgia";
+    offsetX = offsetX * zoomFactor;
+    offsetY = offsetY * zoomFactor;
+
+    ctx.font = "20px Georgia";
     ctx.strokeText("Hello World!",10,50);
-    ctx.fillStyle=color;
-    ctx.lineWidth=5;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 5;
     ctx.strokeStyle = color;
+
+    var nw = $node.width();
+    var nh = $node.innerHeight();
+
     ctx.beginPath();
-    ctx.moveTo(0, 0);
-
-    console.log(parent.getPosition().x+", "+parent.getPosition().y+"\n"+
-                (parent.getPosition().x+100)+", "+(parent.getPosition().y+100)+"\n"+
-                node.getPosition().x+", "+node.getPosition().y);
-
-    ctx.bezierCurveTo(0, 0, 100, 100, node.getPosition().x-parent.getPosition().x, node.getPosition().y-parent.getPosition().y);
+    ctx.moveTo(offsetX, offsetY);
+    console.log(offsetX+", "+offsetY+"\n"+
+                (offsetX+100)+", "+(offsetY)+"\n"+
+                (offsetX)+", "+(offsetY+100)+"\n"+
+                nw +", "+ nh);
+    ctx.bezierCurveTo(offsetX+100, offsetY, offsetX, offsetY+100, nw, nh);
 
     ctx.stroke();
   };
