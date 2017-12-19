@@ -206,11 +206,16 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       mindmapModel.createNode(node, parent);
     } else {
       //var node = the targeted node
+<<<<<<< HEAD
       console.log("on crée un lien 1111");
       console.log("ok");
       mindmapModel.createSymbolicLink(parent, parent.isNearOther(offsetX, offsetY));
 
       console.log("ok");
+=======
+      console.log("on crée un lien");
+      mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
+>>>>>>> 3fa4b3ca9ec63ed8ff5ff1c6f9769010220aeac6
     }
   };
 
@@ -306,6 +311,12 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         creator.attachToNode(node);
         view.editNodeCaption(node);
       }
+    });
+
+    eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
+      var depth = parent.getDepth();
+      console.log("subscribe : "+parent.getSymbolicLinks().length);
+      view.createLink(depth, parent, node);
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {

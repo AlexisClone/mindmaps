@@ -60,6 +60,24 @@ mindmaps.CanvasBranchDrawer = function() {
 
   };
 
+
+
+  this.renderLink = function(ctx, depth, parent, node, color, zoomFactor){
+    ctx.font="20px Georgia";
+    ctx.strokeText("Hello World!",10,50);
+    ctx.fillStyle=color;
+    ctx.lineWidth=5;
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(parent.offsetX, parent.offsetY);
+    console.log(parent.getPosition().x+", "+parent.getPosition().y+"\n"+
+                (parent.getPosition().x+100)+", "+(parent.getPosition().y+100)+"\n"+
+                node.getPosition().x+", "+node.getPosition().y);
+    ctx.bezierCurveTo(parent.getPosition().x, parent.getPosition().y, parent.getPosition().x+100, parent.getPosition().y+100, node.getPosition().x, node.getPosition().y);
+
+    ctx.stroke();
+  };
+
   /**
    * Render that.
    *
@@ -72,8 +90,7 @@ mindmaps.CanvasBranchDrawer = function() {
    * @param {String} color
    * @param {Number} zoomFactor
    */
-  this.render = function(ctx, depth, offsetX, offsetY, $node, $parent, color,
-      zoomFactor) {
+  this.render = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor) {
 
     offsetX = offsetX * zoomFactor;
     offsetY = offsetY * zoomFactor;

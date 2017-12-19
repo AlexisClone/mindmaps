@@ -27,8 +27,12 @@ mindmaps.Node = function() {
 };
 
 //Modifié
-mindmaps.Node.prototype.addSymbolicLink = function(nodeId) {
-  this.symbolicLink.push(nodeId);
+mindmaps.Node.prototype.addSymbolicLink = function(node) {
+  this.symbolicLink.push(node);
+};
+
+mindmaps.Node.prototype.getSymbolicLinks = function() {
+  return this.symbolicLink;
 };
 
 mindmaps.Node.prototype.removeSymbolicLink = function(nodeId) {
@@ -47,7 +51,11 @@ mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
       return listnoeud[i];
     }
   }
+<<<<<<< HEAD
   return null;
+=======
+  return  null;
+>>>>>>> 3fa4b3ca9ec63ed8ff5ff1c6f9769010220aeac6
 };
 
 

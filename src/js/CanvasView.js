@@ -177,8 +177,7 @@ mindmaps.DefaultCanvasView = function() {
     return $("#node-caption-" + node.id);
   }
 
-  function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent,
-      color) {
+  function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color) {
     var canvas = $canvas[0];
     var ctx = canvas.getContext("2d");
 
@@ -186,6 +185,17 @@ mindmaps.DefaultCanvasView = function() {
     branchDrawer.$canvas = $canvas;
     branchDrawer.render(ctx, depth, offsetX, offsetY, $node, $parent,
         color, self.zoomFactor);
+  }
+
+  function drawLinkCanvas($canvas, depth, parent, node){
+    var canvas = $canvas[0];
+    var ctx = canvas.getContext("2d");
+    var color = "#A9A9A9";
+
+    branchDrawer.$canvas = $canvas;
+    console.log(parent);
+    console.log(node);
+    branchDrawer.renderLink(ctx, depth, parent, node, color, self.zoomFactor);
   }
 
   this.init = function() {
@@ -295,6 +305,31 @@ mindmaps.DefaultCanvasView = function() {
 
     console.debug("draw map ms: ", new Date().getTime() - now);
   };
+
+
+  /**
+   * creates a symbolic link between two nodes
+   * @param {Integer} [depth] - non-Optional
+   * @param {mindmaps.Node} [parent]  - non-optional, node from where the link is created
+   * @param {mindmaps.Node} [node] - the targeted node
+   */
+  this.createLink = function (depth, parent, node){
+    if (parent.getSymbolicLinks().length != 0){
+      var number = parent.getSymbolicLinks().length-1;
+      var $canvasLink = $("<canvas/>", {
+        id : "node-canvasLink-" + number + "-" + parent.id,
+        "class" : "line-canvas"
+      });
+
+      drawLinkCanvas($canvasLink, depth, parent, /*parent.getSymbolicLinks()[parent.getSymbolicLinks().length-1]*/ node);
+      console.log($canvasLink);
+      console.log(parent);
+      console.log("#node-" + parent.id);
+      $canvasLink.appendTo("#node-" + parent.id);
+
+    }
+  };
+
 
   /**
    * Inserts a new node including all of its children into the DOM.

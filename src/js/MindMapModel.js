@@ -126,6 +126,10 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
    * @param {mindmaps.Node} node the targeted node
    */
   this.createSymbolicLink = function(parent, node){
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3fa4b3ca9ec63ed8ff5ff1c6f9769010220aeac6
     var action = new mindmaps.action.CreateSymbolicLinkAction(parent, node);
     this.executeAction(action);
   };
