@@ -56,14 +56,32 @@ mindmaps.action.Action.prototype = {
  */
 mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
 
-  //TODO undo()
-
   this.execute = function(){
-    parent.addSymbolicLink(node);
+    parent.addSymbolicLink(node.id);
+  };
+  this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent, node ];
+
+  this.undo = function(){
+    return new mindmaps.action.DeleteSymbolicLinkAction(parent, node);
   };
 
-  this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent, node ];
 };
+mindmaps.action.CreateSymbolicLinkAction.prototype = new mindmaps.action.Action();
+
+
+mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
+
+  this.execute = function(){
+    parent.removeSymbolicLink(node.id);
+  };
+  this.event = [ mindmaps.Event.SYMBOLIC_LINK_DELETED, parent, node ];
+
+  this.undo = function(){
+    return new mindmaps.action.CreateSymbolicLinkAction(parent, node);
+  };
+
+};
+mindmaps.action.DeleteSymbolicLinkAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new MoveNodeAction.

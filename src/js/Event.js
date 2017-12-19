@@ -7,6 +7,8 @@ mindmaps.Event = {
   //Modifié
   SYMBOLIC_LINK_CREATED : "SymbolicLinkCreated",
 
+  SYMBOLIC_LINK_DELETED : "SymbolicLinkDeleted",
+
   /**
    * @event
    * @param {mindmaps.Document} document
