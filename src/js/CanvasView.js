@@ -181,14 +181,15 @@ mindmaps.DefaultCanvasView = function() {
     return $("#node-canvasLink-"+id+"-"+node.id);
   }
 
-  function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color) {
+  function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color, dotted) {
+    var dotted = dotted || false;
     var canvas = $canvas[0];
     var ctx = canvas.getContext("2d");
 
     // set $canvas for beforeDraw() callback.
     branchDrawer.$canvas = $canvas;
     branchDrawer.render(ctx, depth, offsetX, offsetY, $node, $parent,
-        color, self.zoomFactor);
+        color, self.zoomFactor, dotted);
   }
 
   this.init = function() {
@@ -307,7 +308,6 @@ mindmaps.DefaultCanvasView = function() {
    * @param {mindmaps.Node} [node] - the targeted node
    */
   this.createLink = function (depth, parent, node){
-    if (parent.getSymbolicLinks().length != 0){ // vraiment utile ? cette fonction s'execute lors de la creation de link, donc il en existe forcement un (interférences ??)
       var number = parent.getSymbolicLinks().length-1;
       var $canvasLink = $("<canvas/>", {
         id : "node-canvasLink-" + number + "-" + node.id,
@@ -321,11 +321,10 @@ mindmaps.DefaultCanvasView = function() {
       var offsetX = node.getPosition().x - parent.getPosition().x;
       var offsetY = node.getPosition().y - parent.getPosition().y;
 
-      drawLineCanvas($canvasLink, depth, offsetX, offsetY, $node, $parent, color);
+      drawLineCanvas($canvasLink, 1, offsetX, offsetY, $node, $parent, color, true);//depth
 
       $canvasLink.appendTo($node);
 
-    }
   };
 
 
@@ -639,19 +638,22 @@ mindmaps.DefaultCanvasView = function() {
 
     drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color);
 
+    var symbolicLink = node.symbolicLink;
+
     console.log("la réponse est ...");
-    if (node.symbolicLink.length != 0){
+    if (symbolicLink.length != 0){
       console.log("oui");
-      console.log(node.symbolicLink.length);
+      console.log(symbolicLink.length);
       $parent = $getNode(node);
-      offsetPX = node.getPosition().x;
-      offsetPY = node.getPosition().y;
-      for (var i = 0; i < node.symbolicLink.length; i++){
+      //offsetPX = node.getPosition().x;
+      //offsetPY = node.getPosition().y;
+      for (var i = 0; i < symbolicLink.length; i++){
         $canvas = $getLinkCanvas(node, i);
-        $node = $getNode(node.symbolicLink[i]);
-        offsetNX = node.symbolicLink[i].getPosition().x;
-        offsetNY = node.symbolicLink[i].getPosition().y;
-        drawLineCanvas($canvas, dept, offsetX, offsetY, $node ,$parent, color);// a reprendre
+        $node = $getNode(symbolicLink[i]);
+        console.log(symbolicLink[i]);
+        offsetX = symbolicLink[i].getPosition().x - node.getPosition().x;
+        offsetY = symbolicLink[i].getPosition().y - node.getPosition().y;
+        drawLineCanvas($canvas, dept, offsetX, offsetY, $node ,$parent, color, true);// a reprendre
       }
     }
   }
