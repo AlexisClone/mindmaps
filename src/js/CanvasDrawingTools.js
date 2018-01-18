@@ -61,29 +61,91 @@ mindmaps.CanvasBranchDrawer = function() {
   };
 
 
-  this.renderLink = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor){
+  this.renderLink = function(ctx, depth/*, offsetX, offsetY*/, $node, $parent, color, zoomFactor){
 
-    offsetX = offsetX * zoomFactor;
-    offsetY = offsetY * zoomFactor;
+    offsetX = $parent.position().left * zoomFactor;
+    offsetY = $parent.position().top * zoomFactor;
+
+    py = $parent.position().top;
+    px = $parent.position().left;
+    ny = $node.position().top;
+    nx = $node.position().left;
 
     ctx.font = "20px Georgia";
-    ctx.strokeText("Hello World!",10,50);
+    ctx.strokeText("Hello World!",50 * zoomFactor,50 * zoomFactor);
     ctx.fillStyle = color;
     ctx.lineWidth = 5;
     ctx.strokeStyle = color;
 
-    var nw = $node.width();
-    var nh = $node.innerHeight();
+    canvasWidth = 0;
+    canvasHeight = 0;
+    canvasTop = 0;
+    canvasLeft = 0;
 
-    ctx.beginPath();
-    ctx.moveTo(offsetX, offsetY);
-    console.log(offsetX+", "+offsetY+"\n"+
-                (offsetX+100)+", "+(offsetY)+"\n"+
-                (offsetX)+", "+(offsetY+100)+"\n"+
-                nw +", "+ nh);
-    ctx.bezierCurveTo(offsetX+100, offsetY, offsetX, offsetY+100, nw, nh);
+    if (py >= ny){ //node is on top of the parent
+      if (px >= nx){//node on the left of the parent
+        console.log("top left");
+        console.log("distance x : ", px - nx);
+        console.log("distance y : ", py - ny);
+        canvasWidth = px - nx - $node.width()/2;
+        canvasHeight = py - ny - $node.innerHeight();
+        canvasLeft = -(px - nx) + $node.width()/2;
+        canvasTop = -(py - ny) + $node.innerHeight();
+        console.log(canvasWidth, " ", canvasHeight, " ", canvasLeft, " ", canvasTop);
+        this.beforeDraw(canvasWidth, canvasHeight, canvasLeft, canvasTop);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(canvasWidth, canvasHeight);
+      } else {//node on the right of the parent
+        console.log("top right");
+        console.log("distance x : ", nx - px);
+        console.log("distance y : ", py - ny);
+        canvasWidth = nx - px;
+        canvasHeight = py - ny;
+        canvasLeft = $parent.width();
+        canvasTop = -(py - ny);
+        console.log(canvasWidth, " ", canvasHeight, " ", canvasLeft, " ", canvasTop);
+        this.beforeDraw(canvasWidth, canvasHeight, canvasLeft, canvasTop);
+        ctx.beginPath();
+        ctx.moveTo(0, canvasHeight);
+        ctx.lineTo(canvasWidth, 0);
+      }
+    } else {//node is below the parent
+      if (px >= nx){//node on the left of the parent
+        console.log("bottom left");
+        console.log("distance x : ", px - nx);
+        console.log("distance y : ", ny - py);
+        canvasWidth = px - nx;
+        canvasHeight = ny - py;
+        canvasLeft = -(px - nx);
+        canvasTop = $parent.innerHeight();
+        console.log(canvasWidth, " ", canvasHeight, " ", canvasLeft, " ", canvasTop);
+        this.beforeDraw(canvasWidth, canvasHeight, canvasLeft, canvasTop);
+        ctx.beginPath();
+        ctx.moveTo(canvasWidth, 0);
+        ctx.lineTo(0, canvasHeight);
+      } else {//node on the right of the parent
+        console.log("bottom right");
+        console.log("distance x : ", nx - px);
+        console.log("distance y : ", ny - py);
+        canvasWidth = nx - px;
+        canvasHeight = ny - py;
+        canvasLeft = $parent.width();
+        canvasTop = $parent.innerHeight();
+        console.log(canvasWidth, " ", canvasHeight, " ", canvasLeft, " ", canvasTop);
+        this.beforeDraw(canvasWidth, canvasHeight, canvasLeft, canvasTop);
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(canvasWidth, canvasHeight);
+      }
+    }
 
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = color;
+    ctx.setLineDash([5, 5]);
     ctx.stroke();
+
+    console.log("pouet3");
   };
 
   /**
@@ -102,7 +164,7 @@ mindmaps.CanvasBranchDrawer = function() {
 
     offsetX = offsetX * zoomFactor;
     offsetY = offsetY * zoomFactor;
-
+    ctx.strokeText("Hello World!",offsetX, offsetY);
     var pw = $parent.width();
     var nw = $node.width();
     var pih = $parent.innerHeight();

@@ -191,15 +191,21 @@ mindmaps.DefaultCanvasView = function() {
         color, self.zoomFactor);
   }
 
-  function drawLinkCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color){
+/**
+ * function used to draw a symbolic link
+ *
+ */
+  function drawLinkCanvas($canvas, depth/*, offsetX, offsetY*/, $node, $parent, color){
     /*console.log(parent);
     console.log(node);*/
+    console.log($node.position(), $node);
+    console.log($parent.position(), $parent);
 
     var canvas = $canvas[0];
     var ctx = canvas.getContext("2d");
 
     branchDrawer.$canvas = $canvas;
-    branchDrawer.renderLink(ctx, depth, offsetX, offsetY, $node, $parent, color, self.zoomFactor);
+    branchDrawer.renderLink(ctx, depth/*, offsetX, offsetY*/, $node, $parent, color, self.zoomFactor);
   }
 
   this.init = function() {
@@ -332,7 +338,7 @@ mindmaps.DefaultCanvasView = function() {
       var offsetX = parent.offset.x; //ou node ? (cf this.createNode)
       var offsetY = parent.offset.y; //ou node ?
 
-      drawLinkCanvas($canvasLink, depth, offsetX, offsetY, $node, $parent, color);
+      drawLinkCanvas($canvasLink, depth, /*offsetX, offsetY,*/ $node, $parent, color);
       console.log($canvasLink);
       console.log(parent);
       console.log("#node-" + parent.id);
@@ -662,9 +668,9 @@ mindmaps.DefaultCanvasView = function() {
       for (var i = 0; i < node.symbolicLink.length; i++){
         $canvas = $getLinkCanvas(node, i);
         $node = $getNode(node.symbolicLink[i]);
-        offsetNX = node.symbolicLink[i].getPosition().x;
-        offsetNY = node.symbolicLink[i].getPosition().y;
-        drawLinkCanvas($canvas, dept, $parent, $node, /*offsetPX, offsetPY, offsetNX, offsetNY*/);
+        /*offsetNX = node.symbolicLink[i].getPosition().x;
+        offsetNY = node.symbolicLink[i].getPosition().y;*/
+        drawLinkCanvas($canvas, depth, $parent, $node, /*offsetPX, offsetPY, offsetNX, offsetNY*/);
       }
     }
   }
