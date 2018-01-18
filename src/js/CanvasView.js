@@ -192,6 +192,10 @@ mindmaps.DefaultCanvasView = function() {
         color, self.zoomFactor, dotted);
   }
 
+  function drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent){
+    drawLineCanvas($canvas, 1, offsetX, offsetY, $node, $parent, "#A9A9A9", true);
+  }
+
   this.init = function() {
     makeDraggable();
     this.center();
@@ -321,7 +325,7 @@ mindmaps.DefaultCanvasView = function() {
       var offsetX = node.getPosition().x - parent.getPosition().x;
       var offsetY = node.getPosition().y - parent.getPosition().y;
 
-      drawLineCanvas($canvasLink, 1, offsetX, offsetY, $node, $parent, color, true);//depth
+      drawLinkCanvas($canvasLink, offsetX, offsetY, $node, $parent);
 
       $canvasLink.appendTo($node);
 
@@ -645,15 +649,15 @@ mindmaps.DefaultCanvasView = function() {
       console.log("oui");
       console.log(symbolicLink.length);
       $parent = $getNode(node);
-      //offsetPX = node.getPosition().x;
-      //offsetPY = node.getPosition().y;
+
       for (var i = 0; i < symbolicLink.length; i++){
         $canvas = $getLinkCanvas(node, i);
         $node = $getNode(symbolicLink[i]);
-        console.log(symbolicLink[i]);
+
         offsetX = symbolicLink[i].getPosition().x - node.getPosition().x;
         offsetY = symbolicLink[i].getPosition().y - node.getPosition().y;
-        drawLineCanvas($canvas, dept, offsetX, offsetY, $node ,$parent, color, true);// a reprendre
+        $canvas = $getNodeCanvas(symbolicLink[i]);
+        drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
       }
     }
   }
