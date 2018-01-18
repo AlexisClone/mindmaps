@@ -63,6 +63,9 @@ mindmaps.CanvasBranchDrawer = function() {
 
   this.renderLink = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor){
 
+    console.log("ctx: " + ctx + "\ndepth: " + depth + "\noffsetX: " + offsetX + "\noffsetY: " + offsetY
+  + "\n$node: " + $node + "\n$parent: " + $parent + "\ncolor: " + color + + "\nzoomFactor: " + zoomFactor);
+
     offsetX = offsetX * zoomFactor;
     offsetY = offsetY * zoomFactor;
 
@@ -74,6 +77,30 @@ mindmaps.CanvasBranchDrawer = function() {
 
     var nw = $node.width();
     var nh = $node.innerHeight();
+
+
+    var lineWidth = mindmaps.CanvasDrawingUtil.getLineWidth(zoomFactor,
+        depth);
+    var halfLineWidth = lineWidth / 2;
+
+    // avoid zero widths
+    if (width < lineWidth) {
+      width = lineWidth;
+    }
+
+    var nodeAbove = offsetY + nih < pih;
+    if (nodeAbove) {
+      top = nih;
+      height = $parent.outerHeight() - offsetY - top;
+
+      topToBottom = true;
+    } else {
+      top = pih - offsetY;
+      height = $node.outerHeight() - top;
+
+      topToBottom = false;
+    }
+    this.beforeDraw(width, height, left, top);
 
     ctx.beginPath();
     ctx.moveTo(offsetX, offsetY);
