@@ -39,6 +39,14 @@ mindmaps.Node.prototype.removeSymbolicLink = function(nodeID) {
   delete this.symbolicLink[nodeID];
 };
 
+mindmaps.Node.prototype.includeSymbolicLink = function(node) {
+  return this.symbolicLink.includes(node);
+};
+
+mindmaps.Node.prototype.haveSymbolicLink = function() {
+  return ( this.symbolicLink.length > 0 );
+};
+
 //mindmaps.Util.distance(this.getPosition().x - offsetX, this.getPosition().y - offsetY) < 50
 mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
   var listnoeud = [];

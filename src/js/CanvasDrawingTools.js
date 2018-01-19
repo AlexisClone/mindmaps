@@ -60,59 +60,6 @@ mindmaps.CanvasBranchDrawer = function() {
 
   };
 
-
-  this.renderLink = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor){
-
-    console.log("ctx: " + ctx + "\ndepth: " + depth + "\noffsetX: " + offsetX + "\noffsetY: " + offsetY
-  + "\n$node: " + $node + "\n$parent: " + $parent + "\ncolor: " + color + + "\nzoomFactor: " + zoomFactor);
-
-    offsetX = offsetX * zoomFactor;
-    offsetY = offsetY * zoomFactor;
-
-    ctx.font = "20px Georgia";
-    ctx.strokeText("Hello World!",10,50);
-    ctx.fillStyle = color;
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = color;
-
-    var nw = $node.width();
-    var nh = $node.innerHeight();
-
-
-    var lineWidth = mindmaps.CanvasDrawingUtil.getLineWidth(zoomFactor,
-        depth);
-    var halfLineWidth = lineWidth / 2;
-
-    // avoid zero widths
-    if (width < lineWidth) {
-      width = lineWidth;
-    }
-
-    var nodeAbove = offsetY + nih < pih;
-    if (nodeAbove) {
-      top = nih;
-      height = $parent.outerHeight() - offsetY - top;
-
-      topToBottom = true;
-    } else {
-      top = pih - offsetY;
-      height = $node.outerHeight() - top;
-
-      topToBottom = false;
-    }
-    this.beforeDraw(width, height, left, top);
-
-    ctx.beginPath();
-    ctx.moveTo(offsetX, offsetY);
-    console.log(offsetX+", "+offsetY+"\n"+
-                (offsetX+100)+", "+(offsetY)+"\n"+
-                (offsetX)+", "+(offsetY+100)+"\n"+
-                nw +", "+ nh);
-    ctx.bezierCurveTo(offsetX+100, offsetY, offsetX, offsetY+100, nw, nh);
-
-    ctx.stroke();
-  };
-
   /**
    * Render that.
    *
@@ -124,6 +71,7 @@ mindmaps.CanvasBranchDrawer = function() {
    * @param {jQuery} $parent
    * @param {String} color
    * @param {Number} zoomFactor
+   * @param {Boolean} dotted
    */
   this.render = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor, dotted) {
 
