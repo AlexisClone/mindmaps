@@ -193,8 +193,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       nearOther = true;
     }
 
-
-
     if (!nearOther){
       // update the model
       var node = new mindmaps.Node();

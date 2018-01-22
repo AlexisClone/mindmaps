@@ -405,11 +405,12 @@ mindmaps.DefaultCanvasView = function() {
 
             // reposition and draw links canvases while dragging
             //TODO : simplifier avec mindmapsNodeMap & lui meme
+
             var root = node.getRoot();
 
             //s'il est "parent"
+            $parent = $getNode(node);
             node.getSymbolicLinks().forEach(function(child) {
-              $parent = $getNode(node);
               $node = $getNode(child);
               $canvas = $getLinkCanvas(child, node.symbolicLink.indexOf(child));
               offsetX = child.getPosition().x - ui.position.left / self.zoomFactor;
@@ -419,13 +420,14 @@ mindmaps.DefaultCanvasView = function() {
             });
 
             // s'il est "enfant"
-            root.forEachChild(function(child) {
-              if(child.includeSymbolicLink(node)){
-                $parent = $getNode(child);
-                $node = $getNode(node);
-                $canvas = $getLinkCanvas(node, child.symbolicLink.indexOf(node));
-                offsetX = ui.position.left - child.getPosition().x / self.zoomFactor;
-                offsetY = ui.position.top - child.getPosition().y / self.zoomFactor;
+            $node = $getNode(node);
+            root.forEachDescendant(function(parent) {
+              if(parent.includeSymbolicLink(node)){
+                $parent = $getNode(parent);
+                $canvas = $getLinkCanvas(node, parent.symbolicLink.indexOf(node));
+                
+                offsetX = node.getPosition().x - ui.position.left / self.zoomFactor;
+                offsetY = node.getPosition().y - ui.position.top / self.zoomFactor;
 
                 drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
               }
@@ -693,7 +695,6 @@ mindmaps.DefaultCanvasView = function() {
       var offsetX = symbolicLink[i].getPosition().x - node.getPosition().x;
       var offsetY = symbolicLink[i].getPosition().y - node.getPosition().y;
 
-
       drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
     }
   }
@@ -718,14 +719,7 @@ mindmaps.DefaultCanvasView = function() {
     }
 
     // redraw all link canvases
-    //TODO : simplifier avec mindmapsNodeMap ?
-    var root = node.getRoot();
-    drawSymbolicLinkCanvas(root);
-    root.forEachChild(function(node) {
-      if(node.haveSymbolicLink()){
-        drawSymbolicLinkCanvas(node);
-      }
-    });
+    drawSymbolicLinkCanvas(node);
 
   };
 
