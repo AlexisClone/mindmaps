@@ -35,8 +35,10 @@ mindmaps.Node.prototype.getSymbolicLinks = function() {
   return this.symbolicLink;
 };
 
-mindmaps.Node.prototype.removeSymbolicLink = function(nodeID) {
-  delete this.symbolicLink[nodeID];
+mindmaps.Node.prototype.removeSymbolicLink = function(node) {
+  console.log( this.symbolicLink);
+  delete this.symbolicLink[this.symbolicLink.indexOf(node)];
+  console.log( this.symbolicLink);
 };
 
 mindmaps.Node.prototype.includeSymbolicLink = function(node) {

@@ -331,6 +331,18 @@ mindmaps.DefaultCanvasView = function() {
 
   };
 
+  /**
+   * creates a symbolic link between two nodes
+   * @param {Integer} [depth] - non-Optional
+   * @param {mindmaps.Node} [parent]  - non-optional, node from where the link is created
+   * @param {mindmaps.Node} [node] - the targeted node
+   */
+  this.deleteLink = function (idNode, node){
+      var $canvas = $getLinkCanvas(node, idNode);
+      console.log("ok");
+      console.log($canvas);
+      $canvas.remove();
+  };
 
   /**
    * Inserts a new node including all of its children into the DOM.
@@ -413,8 +425,8 @@ mindmaps.DefaultCanvasView = function() {
             node.getSymbolicLinks().forEach(function(child) {
               $node = $getNode(child);
               $canvas = $getLinkCanvas(node, node.symbolicLink.indexOf(child));
-              offsetX = child.getPosition().x - (ui.position.left + node.getParent().getPosition().x) / self.zoomFactor;
-              offsetY = child.getPosition().y - (ui.position.top + node.getParent().getPosition().y) / self.zoomFactor;
+              offsetX = child.getPosition().x - (ui.position.left / self.zoomFactor + node.getParent().getPosition().x);
+              offsetY = child.getPosition().y - (ui.position.top / self.zoomFactor + node.getParent().getPosition().y);
 
               drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
             });
@@ -425,9 +437,8 @@ mindmaps.DefaultCanvasView = function() {
               if(parent.includeSymbolicLink(node)){
                 $parent = $getNode(parent);
                 $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(node));
-
-                offsetX = (ui.position.left + node.getParent().getPosition().x) - parent.getPosition().x / self.zoomFactor;
-                offsetY = (ui.position.top + node.getParent().getPosition().y) - parent.getPosition().y / self.zoomFactor;
+                offsetX = (ui.position.left / self.zoomFactor + node.getParent().getPosition().x) - parent.getPosition().x;
+                offsetY = (ui.position.top / self.zoomFactor + node.getParent().getPosition().y) - parent.getPosition().y;
 
                 drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
               }
@@ -698,8 +709,6 @@ mindmaps.DefaultCanvasView = function() {
 
   //s'il est "parent" d'autres noeuds
     $parent = $getNode(node);
-
-    console.log("ok2");
 
     for (var i = 0; i < symbolicLink.length; i++){
       $canvas = $getLinkCanvas(node, i);

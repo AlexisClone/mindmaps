@@ -71,10 +71,12 @@ mindmaps.action.CreateSymbolicLinkAction.prototype = new mindmaps.action.Action(
 
 mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
 
+  var idNode = parent.symbolicLink.indexOf(node);
+
   this.execute = function(){
-    parent.removeSymbolicLink(node.id);
+    parent.removeSymbolicLink(node);
   };
-  this.event = [ mindmaps.Event.SYMBOLIC_LINK_DELETED, parent, node ];
+  this.event = [ mindmaps.Event.SYMBOLIC_LINK_DELETED, idNode, parent ];
 
   this.undo = function(){
     return new mindmaps.action.CreateSymbolicLinkAction(parent, node);
