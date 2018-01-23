@@ -843,6 +843,7 @@ mindmaps.DefaultCanvasView = function() {
         });
       }
 
+      // redraw all symbolicLink
       drawSymbolicLinkCanvas(node);
 
     }
