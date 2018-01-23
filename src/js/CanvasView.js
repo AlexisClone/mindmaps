@@ -339,11 +339,28 @@ mindmaps.DefaultCanvasView = function() {
    */
   this.deleteLink = function (idNode, node){
       var $canvas = $getLinkCanvas(node, idNode);
-      console.log("ok");
-      console.log($canvas);
+      console.log("ON A DELETE UN LIEN");
       $canvas.remove();
   };
+  
+  this.deleteAllLinks(node){
+    //delete the links created from him
+    if (node.getSymbolicLinks().length > 0){
+      for (var i = 0; i < node.getSymbolicLinks().length; i++){
+        console.log("p1");
+        this.deleteLink(node.id, node.getSymbolicLinks()[i]);
+      }
+    }
 
+    //delete the links created to him
+    var root = node.getRoot();
+    root.forEachDescendant(function(parent) {
+      if(parent.includeSymbolicLink(node)){
+        console.log("p2");
+        this.deleteLink(parent.id, node);
+      }
+    });
+  }
   /**
    * Inserts a new node including all of its children into the DOM.
    *
@@ -529,23 +546,6 @@ mindmaps.DefaultCanvasView = function() {
     // creator.detach();
 
     // delete all DOM below
-
-    //delete the links created from him
-    if (node.getSymbolicLinks().length > 0){
-      for (var i = 0; i < node.getSymbolicLinks().length; i++){
-        console.log(node);
-        deleteLink(node, node.getSymbolicLinks()[i]);
-      }
-    }
-
-    //delete the links created to him
-    var root = node.getRoot();
-    root.forEachDescendant(function(parent) {
-      if(parent.includeSymbolicLink(node)){
-        deleteLink(parent, node);
-      }
-    });
-
     var $node = $getNode(node);
     $node.remove();
 
