@@ -344,12 +344,12 @@ mindmaps.DefaultCanvasView = function() {
 
   this.deleteAllLinks = function(node){
     console.log("pppp");
+    
     //delete the links created from him
     if (node.getSymbolicLinks().length > 0){
       for (var i = 0; i < node.getSymbolicLinks().length; i++){
         console.log("p1");
         this.deleteLink(i, node);
-
       }
     }
   }
