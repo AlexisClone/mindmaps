@@ -43,10 +43,6 @@ mindmaps.Node.prototype.includeSymbolicLink = function(node) {
   return this.symbolicLink.includes(node);
 };
 
-mindmaps.Node.prototype.haveSymbolicLink = function() {
-  return ( this.symbolicLink.length > 0 );
-};
-
 //mindmaps.Util.distance(this.getPosition().x - offsetX, this.getPosition().y - offsetY) < 50
 mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
   var listnoeud = [];
@@ -54,7 +50,7 @@ mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
   this.forEachDescendant(function(node){
     listnoeud.push(node);
   });
-  for (var i= 0; i < listnoeud.length; i++){
+  for (var i=0; i < listnoeud.length; i++){
     if (mindmaps.Util.distance(listnoeud[i].getPosition().x - offsetX, listnoeud[i].getPosition().y - offsetY) < 50){
       return listnoeud[i];
     }

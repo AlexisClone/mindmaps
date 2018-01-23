@@ -425,9 +425,10 @@ mindmaps.DefaultCanvasView = function() {
               if(parent.includeSymbolicLink(node)){
                 $parent = $getNode(parent);
                 $canvas = $getLinkCanvas(node, parent.symbolicLink.indexOf(node));
-                
-                offsetX = node.getPosition().x - ui.position.left / self.zoomFactor;
-                offsetY = node.getPosition().y - ui.position.top / self.zoomFactor;
+                offsetX = (parent.getPosition().x - node.getPosition().x) - (node.getPosition().x - ui.position.left) / self.zoomFactor;
+                offsetY = (parent.getPosition().y - node.getPosition().y) - (node.getPosition().y - ui.position.top) / self.zoomFactor;
+                console.log("nodeX :" + node.getPosition().x + " nodeY :" + node.getPosition().y);
+                console.log("parentX :" + parent.getPosition().x + " parentY :" + parent.getPosition().y);
 
                 drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
               }
@@ -842,6 +843,9 @@ mindmaps.DefaultCanvasView = function() {
           scale(child, depth + 1);
         });
       }
+
+      drawSymbolicLinkCanvas(node);
+
     }
   };
 
