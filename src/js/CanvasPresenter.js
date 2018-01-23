@@ -323,6 +323,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       }
 
       // update view
+      view.deleteAllLinks(node);
       view.deleteNode(node);
       if (parent.isLeaf()) {
         view.removeFoldButton(parent);
