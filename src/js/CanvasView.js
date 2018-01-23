@@ -331,6 +331,18 @@ mindmaps.DefaultCanvasView = function() {
 
   };
 
+  /**
+   * creates a symbolic link between two nodes
+   * @param {Integer} [depth] - non-Optional
+   * @param {mindmaps.Node} [parent]  - non-optional, node from where the link is created
+   * @param {mindmaps.Node} [node] - the targeted node
+   */
+  this.deleteLink = function (idNode, node){
+      var $canvas = $getLinkCanvas(node, idNode);
+      console.log("ok");
+      console.log($canvas);
+      $canvas.remove();
+  };
 
   /**
    * Inserts a new node including all of its children into the DOM.
@@ -684,8 +696,6 @@ mindmaps.DefaultCanvasView = function() {
 
   //s'il est "parent" d'autres noeuds
     $parent = $getNode(node);
-
-    console.log("ok2");
 
     for (var i = 0; i < symbolicLink.length; i++){
       $canvas = $getLinkCanvas(node, i);

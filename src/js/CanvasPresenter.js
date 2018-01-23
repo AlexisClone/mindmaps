@@ -309,6 +309,11 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       view.createLink(depth, parent, node);
     });
 
+    eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_DELETED, function(idNode, parent) {
+      //console.log("subscribe : "+parent.getSymbolicLinks().length);
+      view.deleteLink(idNode, parent);
+    });
+
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {
       // select parent if we are deleting a selected node or a descendant
       var selected = mindmapModel.selectedNode;
