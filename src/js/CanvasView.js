@@ -332,17 +332,16 @@ mindmaps.DefaultCanvasView = function() {
   };
 
   /**
-   * creates a symbolic link between two nodes
-   * @param {Integer} [depth] - non-Optional
-   * @param {mindmaps.Node} [parent]  - non-optional, node from where the link is created
-   * @param {mindmaps.Node} [node] - the targeted node
+   * delete a symbolic link between two nodes
+   * @param {Integer} [idNode] - non-Optional
+   * @param {mindmaps.Node} [node]  - non-optional, node from where the link is created
    */
   this.deleteLink = function (idNode, node){
       var $canvas = $getLinkCanvas(node, idNode);
       console.log("ON A DELETE UN LIEN");
       $canvas.remove();
   };
-  
+
   this.deleteAllLinks(node){
     //delete the links created from him
     if (node.getSymbolicLinks().length > 0){
