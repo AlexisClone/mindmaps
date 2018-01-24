@@ -68,7 +68,14 @@ mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
 };
 mindmaps.action.CreateSymbolicLinkAction.prototype = new mindmaps.action.Action();
 
-
+//Modifié
+/**
+ *Delete a link between two existant nodes
+ *
+ * @argument mandmaps.action.action
+ * @param {mindmaps.Node} parent the node from where the link was created
+ * @param {mindmaps.Node} node the node targeted by the link
+ */
 mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
 
   var idNode = parent.symbolicLink.indexOf(node);

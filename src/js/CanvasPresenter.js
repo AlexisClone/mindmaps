@@ -204,7 +204,11 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       mindmapModel.createNode(node, parent);
     } else {
       //var node = the targeted node
-      mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
+      if (!parent.includeSymbolicLink(tempNode.isNearOther(pos.x, pos.y))){
+        mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
+      } else  {
+        console.log("error : this symbolic link already exists");
+      }
     }
   };
 
