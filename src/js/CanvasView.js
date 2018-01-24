@@ -343,12 +343,9 @@ mindmaps.DefaultCanvasView = function() {
   };
 
   this.deleteAllLinks = function(node){
-    console.log("pppp");
-    
     //delete the links created from him
     if (node.getSymbolicLinks().length > 0){
       for (var i = 0; i < node.getSymbolicLinks().length; i++){
-        console.log("p1");
         this.deleteLink(i, node);
       }
     }
@@ -426,7 +423,18 @@ mindmaps.DefaultCanvasView = function() {
 
             // reposition and draw links canvases while dragging
             //TODO : simplifier avec mindmapsNodeMap & lui meme
+            node.getRoot().forEachDescendant(function(parent) {
+              $parent = $getNode(parent);
+              parent.getSymbolicLinks().forEach(function(child) {
+                $node = $getNode(child);
+                $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(child));
+                offsetX = child.getPosition().x - (ui.position.left / self.zoomFactor + parent.getParent().getPosition().x);
+                offsetY = child.getPosition().y - (ui.position.top / self.zoomFactor + parent.getParent().getPosition().y);
 
+                drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
+              });
+            });
+/*
             var root = node.getRoot();
 
             //s'il est "parent"
@@ -452,6 +460,7 @@ mindmaps.DefaultCanvasView = function() {
                 drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
               }
             });
+            */
 
             // fire dragging event
             if (self.nodeDragging) {
@@ -739,6 +748,9 @@ mindmaps.DefaultCanvasView = function() {
 
     // redraw all link canvases
     drawSymbolicLinkCanvas(node);
+    node.getRoot().forEachDescendant(function(child) {
+      drawSymbolicLinkCanvas(child);
+    });
 
   };
 
