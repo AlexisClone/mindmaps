@@ -304,7 +304,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
     eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
       var depth = parent.getDepth();
-      console.log("subscribe : "+parent.getSymbolicLinks().length);
       view.createLink(depth, parent, node);
     });
 

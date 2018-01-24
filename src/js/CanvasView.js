@@ -338,12 +338,10 @@ mindmaps.DefaultCanvasView = function() {
    */
   this.deleteLink = function (idNode, node){
       var $canvas = $getLinkCanvas(node, idNode);
-      console.log($canvas);
       $canvas.remove();
   };
 
   this.deleteAllLinks = function(node){
-    console.log("pppp");
 
     //delete the links created from him
     if (node.getSymbolicLinks().length > 0){
