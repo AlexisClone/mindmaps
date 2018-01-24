@@ -322,28 +322,19 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       }
 
       // delete symbolic links to node
-      console.log("flag0");
-
       var root = parent.getRoot();
       root.forEachDescendant(function(child) {
-        console.log("flag1");
-        /* FORCEMENT FALSE
-        node est déjà supprimé ou un truc du genre
-        */
         console.log(child.includeSymbolicLink(node));
         if(child.includeSymbolicLink(node)){
-          console.log("zhjfyev");
           view.deleteLink(child.symbolicLink.indexOf(node), child);
           child.removeSymbolicLink(node);
         }
       });
-      node.symbolicLink = [];
-
-
-      console.log("flag3");
 
       // update view
       view.deleteAllLinks(node);
+      node.symbolicLink = [];
+
       view.deleteNode(node);
       if (parent.isLeaf()) {
         view.removeFoldButton(parent);
