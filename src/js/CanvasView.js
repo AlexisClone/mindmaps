@@ -438,10 +438,10 @@ mindmaps.DefaultCanvasView = function() {
             //if the node is "child" of a symbolic link
             $node = $getNode(node);
             if(root.includeSymbolicLink(node)){
-              $parent = $getNode(parent);
-              $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(node));
-              offsetX = (ui.position.left / self.zoomFactor + node.getParent().getPosition().x) - parent.getPosition().x;
-              offsetY = (ui.position.top / self.zoomFactor + node.getParent().getPosition().y) - parent.getPosition().y;
+              $parent = $getNode(root);
+              $canvas = $getLinkCanvas(root, root.symbolicLink.indexOf(node));
+              offsetX = (ui.position.left / self.zoomFactor + node.getParent().getPosition().x) - root.getPosition().x;
+              offsetY = (ui.position.top / self.zoomFactor + node.getParent().getPosition().y) - root.getPosition().y;
 
               drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
             }
@@ -472,6 +472,15 @@ mindmaps.DefaultCanvasView = function() {
 
                 //if the node is "child" of a symbolic link
                 $childNode = $getNode(childNode);
+                if(root.includeSymbolicLink(node)){
+                  console.log("ding");
+                  $parent = $getNode(root);
+                  $canvas = $getLinkCanvas(root, root.symbolicLink.indexOf(node));
+                  offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - root.getPosition().x + node.getParent().getPosition().x;
+                  offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - root.getPosition().y + node.getParent().getPosition().y;
+
+                  drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
+                }
                 root.forEachDescendant(function(parent) {
                   if(parent.includeSymbolicLink(childNode) && !node.isDescendant(parent)){
                     $parent = $getNode(parent);
