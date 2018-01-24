@@ -307,11 +307,10 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * creates a symbolic link between two nodes
-   * @param {Integer} [depth] - non-Optional
    * @param {mindmaps.Node} [parent]  - non-optional, node from where the link is created
    * @param {mindmaps.Node} [node] - the targeted node
    */
-  this.createLink = function (depth, parent, node){
+  this.createLink = function (parent, node){
       var number = parent.getSymbolicLinks().length-1;
       var $canvasLink = $("<canvas/>", {
         id : "node-canvasLink-" + number + "-" + parent.id,
@@ -458,17 +457,19 @@ mindmaps.DefaultCanvasView = function() {
                 //s'il est "parent"
                 $parent = $getNode(childNode);
                 childNode.getSymbolicLinks().forEach(function(child) {
-                  $childNode = $getNode(child);
-                  $canvas = $getLinkCanvas(childNode, childNode.symbolicLink.indexOf(child));
-                  offsetX = ((node.getPosition().x - childNode.getPosition().x) - (ui.position.left / self.zoomFactor)) + child.getPosition().x;
-                  offsetY = ((node.getPosition().y - childNode.getPosition().y) - (ui.position.top / self.zoomFactor)) + child.getPosition().y;
-                  drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                  if (!node.isDescendant(child)){
+                    $childNode = $getNode(child);
+                    $canvas = $getLinkCanvas(childNode, childNode.symbolicLink.indexOf(child));
+                    offsetX = ((node.getPosition().x - childNode.getPosition().x) - (ui.position.left / self.zoomFactor)) + child.getPosition().x;
+                    offsetY = ((node.getPosition().y - childNode.getPosition().y) - (ui.position.top / self.zoomFactor)) + child.getPosition().y;
+                    drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                  }
                 });
 
                 // s'il est "enfant"
                 $childNode = $getNode(childNode);
                 root.forEachDescendant(function(parent) {
-                  if(parent.includeSymbolicLink(childNode)){
+                  if(parent.includeSymbolicLink(childNode) && !node.isDescendant(parent)){
                     $parent = $getNode(parent);
                     $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(childNode));
                     offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - parent.getPosition().x;

@@ -303,12 +303,10 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     });
 
     eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
-      var depth = parent.getDepth();
-      view.createLink(depth, parent, node);
+      view.createLink(parent, node);
     });
 
     eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_DELETED, function(idNode, parent) {
-      //console.log("subscribe : "+parent.getSymbolicLinks().length);
       view.deleteLink(idNode, parent);
     });
 
@@ -323,7 +321,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       // delete symbolic links to node
       var root = parent.getRoot();
       root.forEachDescendant(function(child) {
-        console.log(child.includeSymbolicLink(node));
         if(child.includeSymbolicLink(node)){
           view.deleteLink(child.symbolicLink.indexOf(node), child);
           child.removeSymbolicLink(node);
