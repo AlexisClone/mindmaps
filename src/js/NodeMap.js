@@ -1,7 +1,7 @@
 /**
  * Creates a new NodeMap object. Map implementation for nodes. The key is
  * automatically set to the node id.
- * 
+ *
  * @constructor
  */
 mindmaps.NodeMap = function() {
@@ -11,7 +11,7 @@ mindmaps.NodeMap = function() {
 
 /**
  * Return a node by its ID.
- * 
+ *
  * @param {String} nodeId
  * @returns {mindmaps.Node}
  */
@@ -21,7 +21,7 @@ mindmaps.NodeMap.prototype.get = function(nodeId) {
 
 /**
  * Adds a node to the map if it hasn't been added before.
- * 
+ *
  * @param {mindmaps.Node} node
  * @returns {Boolean} true if added, false otherwise.
  */
@@ -36,7 +36,7 @@ mindmaps.NodeMap.prototype.add = function(node) {
 
 /**
  * Removes a node from the map.
- * 
+ *
  * @param {mindmaps.Node} node
  * @returns {Boolean} true if removed, false otherwise.
  */
@@ -51,7 +51,7 @@ mindmaps.NodeMap.prototype.remove = function(node) {
 
 /**
  * Returns the number of nodes in the map.
- * 
+ *
  * @returns {Number}
  */
 mindmaps.NodeMap.prototype.size = function() {
@@ -60,7 +60,7 @@ mindmaps.NodeMap.prototype.size = function() {
 
 /**
  * Returns all nodes in the map.
- * 
+ *
  * @returns {Array}
  */
 mindmaps.NodeMap.prototype.values = function() {
@@ -71,7 +71,7 @@ mindmaps.NodeMap.prototype.values = function() {
 
 /**
  * Iterator for nodes.
- * 
+ *
  * @param {Function} callback, first argument should be the node.
  */
 mindmaps.NodeMap.prototype.each = function(callback) {

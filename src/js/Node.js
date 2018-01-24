@@ -120,6 +120,19 @@ mindmaps.Node.fromObject = function(obj) {
     node.addChild(childNode);
   });
 
+  obj.symbolicLink.forEach(function(nodeId) {
+    try{
+      var child = mindmaps.Mindmap.get(nodeId);
+    }catch(e) {
+      console.log("error");
+    }
+    if (node == null){
+      console.log("arf");
+    }else{
+      node.addSymbolicLink(node);
+    }
+  });
+
   return node;
 };
 
@@ -142,10 +155,19 @@ mindmaps.Node.prototype.toJSON = function() {
     return result;
   })();
 
+  var symbolicLinks = (function() {
+    var result = [];
+    self.symbolicLink.forEach(function(child) {
+      result.push(child.id);
+    });
+    return result;
+  })();
+
   var obj = {
     id : this.id,
     // store parent as id since we have to avoid circular references
     parentId : this.parent ? this.parent.id : null,
+    symbolicLink : symbolicLinks,
     text : this.text,
     offset : this.offset,
     foldChildren : this.foldChildren,
