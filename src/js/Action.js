@@ -57,7 +57,7 @@ mindmaps.action.Action.prototype = {
 mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
 
   this.execute = function(){
-    parent.addSymbolicLink(node.id);
+    parent.addSymbolicLink(node);
   };
   this.event = [ mindmaps.Event.SYMBOLIC_LINK_CREATED, parent, node ];
 
@@ -68,13 +68,22 @@ mindmaps.action.CreateSymbolicLinkAction = function(parent, node) {
 };
 mindmaps.action.CreateSymbolicLinkAction.prototype = new mindmaps.action.Action();
 
-
+//Modifié
+/**
+ *Delete a link between two existant nodes
+ *
+ * @argument mandmaps.action.action
+ * @param {mindmaps.Node} parent the node from where the link was created
+ * @param {mindmaps.Node} node the node targeted by the link
+ */
 mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
 
+  var idNode = parent.symbolicLink.indexOf(node);
+
   this.execute = function(){
-    parent.removeSymbolicLink(node.id);
+    parent.removeSymbolicLink(node);
   };
-  this.event = [ mindmaps.Event.SYMBOLIC_LINK_DELETED, parent, node ];
+  this.event = [ mindmaps.Event.SYMBOLIC_LINK_DELETED, idNode, parent ];
 
   this.undo = function(){
     return new mindmaps.action.CreateSymbolicLinkAction(parent, node);

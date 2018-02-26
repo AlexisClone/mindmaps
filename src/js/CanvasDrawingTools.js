@@ -159,8 +159,9 @@ mindmaps.CanvasBranchDrawer = function() {
    * @param {jQuery} $parent
    * @param {String} color
    * @param {Number} zoomFactor
+   * @param {Boolean} dotted
    */
-  this.render = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor) {
+  this.render = function(ctx, depth, offsetX, offsetY, $node, $parent, color, zoomFactor, dotted) {
 
     offsetX = offsetX * zoomFactor;
     offsetY = offsetY * zoomFactor;
@@ -306,6 +307,12 @@ mindmaps.CanvasBranchDrawer = function() {
     ctx.fillStyle = color;
 
     ctx.beginPath();
+    if(dotted){
+      ctx.setLineDash([10,5]);
+    }else{
+      ctx.setLineDash([]);
+    }
+
     ctx.moveTo(startX, startY);
     ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
     ctx.stroke();

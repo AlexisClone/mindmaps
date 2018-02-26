@@ -193,8 +193,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       nearOther = true;
     }
 
-
-
     if (!nearOther){
       // update the model
       var node = new mindmaps.Node();
@@ -206,8 +204,11 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       mindmapModel.createNode(node, parent);
     } else {
       //var node = the targeted node
-      console.log("on crée un lien");
-      mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
+      if (!parent.includeSymbolicLink(tempNode.isNearOther(pos.x, pos.y))){
+        mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
+      } else  {
+        console.log("error : this symbolic link already exists");
+      }
     }
   };
 
@@ -306,9 +307,11 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     });
 
     eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
-      var depth = parent.getDepth();
-      console.log("subscribe : "+parent.getSymbolicLinks().length);
-      view.createLink(depth, parent, node);
+      view.createLink(parent, node);
+    });
+
+    eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_DELETED, function(idNode, parent) {
+      view.deleteLink(idNode, parent);
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {
@@ -319,7 +322,19 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         mindmapModel.selectNode(parent);
       }
 
+      // delete symbolic links to node
+      var root = parent.getRoot();
+      root.forEachDescendant(function(child) {
+        if(child.includeSymbolicLink(node)){
+          view.deleteLink(child.symbolicLink.indexOf(node), child);
+          child.removeSymbolicLink(node);
+        }
+      });
+
       // update view
+      view.deleteAllLinks(node);
+      node.symbolicLink = [];
+
       view.deleteNode(node);
       if (parent.isLeaf()) {
         view.removeFoldButton(parent);

@@ -181,31 +181,23 @@ mindmaps.DefaultCanvasView = function() {
     return $("#node-canvasLink-"+id+"-"+node.id);
   }
 
-  function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color) {
+  function drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color, dotted) {
+    var dotted = dotted || false;
     var canvas = $canvas[0];
     var ctx = canvas.getContext("2d");
 
     // set $canvas for beforeDraw() callback.
     branchDrawer.$canvas = $canvas;
     branchDrawer.render(ctx, depth, offsetX, offsetY, $node, $parent,
-        color, self.zoomFactor);
+        color, self.zoomFactor, dotted);
   }
 
 /**
  * function used to draw a symbolic link
  *
  */
-  function drawLinkCanvas($canvas, depth/*, offsetX, offsetY*/, $node, $parent, color){
-    /*console.log(parent);
-    console.log(node);*/
-    console.log($node.position(), $node);
-    console.log($parent.position(), $parent);
-
-    var canvas = $canvas[0];
-    var ctx = canvas.getContext("2d");
-
-    branchDrawer.$canvas = $canvas;
-    branchDrawer.renderLink(ctx, depth/*, offsetX, offsetY*/, $node, $parent, color, self.zoomFactor);
+  function drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent){
+    drawLineCanvas($canvas, 1, offsetX, offsetY, $node, $parent, "#A9A9A9", true);
   }
 
   this.init = function() {
@@ -319,12 +311,10 @@ mindmaps.DefaultCanvasView = function() {
 
   /**
    * creates a symbolic link between two nodes
-   * @param {Integer} [depth] - non-Optional
    * @param {mindmaps.Node} [parent]  - non-optional, node from where the link is created
    * @param {mindmaps.Node} [node] - the targeted node
    */
-  this.createLink = function (depth, parent, node){
-    if (parent.getSymbolicLinks().length != 0){ // vraiment utile ? cette fonction s'execute lors de la creation de link, donc il en existe forcement un (interférences ??)
+  this.createLink = function (parent, node){
       var number = parent.getSymbolicLinks().length-1;
       var $canvasLink = $("<canvas/>", {
         id : "node-canvasLink-" + number + "-" + parent.id,
@@ -335,19 +325,35 @@ mindmaps.DefaultCanvasView = function() {
       var $node = $getNode(node);
       var color = "#A9A9A9";
 
-      var offsetX = parent.offset.x; //ou node ? (cf this.createNode)
-      var offsetY = parent.offset.y; //ou node ?
+      var offsetX = node.getPosition().x - parent.getPosition().x;
+      var offsetY = node.getPosition().y - parent.getPosition().y;
 
-      drawLinkCanvas($canvasLink, depth, /*offsetX, offsetY,*/ $node, $parent, color);
-      console.log($canvasLink);
-      console.log(parent);
-      console.log("#node-" + parent.id);
-      $canvasLink.appendTo("#node-" + parent.id);
+      drawLinkCanvas($canvasLink, offsetX, offsetY, $node, $parent);
 
-    }
+      $canvasLink.appendTo($node);
+
   };
 
-
+  /**
+   * delete a symbolic link between two nodes
+   * @param {Integer} [idNode] - non-Optional
+   * @param {mindmaps.Node} [node]  - non-optional, node from where the link is created
+   */
+  this.deleteLink = function (idNode, node){
+      var $canvas = $getLinkCanvas(node, idNode);
+      $canvas.remove();
+  };
+  /**
+   * delete a node's symbolic links
+   * @param {mindmaps.Node} [node]  - non-optional, node from where the links are created
+   */
+  this.deleteAllLinks = function(node){
+    if (node.getSymbolicLinks().length > 0){
+      for (var i = 0; i < node.getSymbolicLinks().length; i++){
+        this.deleteLink(i, node);
+      }
+    }
+  }
   /**
    * Inserts a new node including all of its children into the DOM.
    *
@@ -416,8 +422,80 @@ mindmaps.DefaultCanvasView = function() {
             var color = node.branchColor;
             var $canvas = $getNodeCanvas(node);
 
-            drawLineCanvas($canvas, depth, offsetX, offsetY, $node,
-                $parent, color);
+            drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color);
+
+            // reposition and draw links canvases while dragging
+            //TODO : simplifier avec mindmapsNodeMap & lui meme
+
+            var root = node.getRoot();
+            //if the node is "parent" of a symbolic link
+            $parent = $getNode(node);
+            node.getSymbolicLinks().forEach(function(child) {
+              $node = $getNode(child);
+              $canvas = $getLinkCanvas(node, node.symbolicLink.indexOf(child));
+              offsetX = child.getPosition().x - (ui.position.left / self.zoomFactor + node.getParent().getPosition().x);
+              offsetY = child.getPosition().y - (ui.position.top / self.zoomFactor + node.getParent().getPosition().y);
+
+              drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
+            });
+
+            //if the node is "child" of a symbolic link
+            $node = $getNode(node);
+            if(root.includeSymbolicLink(node)){
+              $parent = $getNode(root);
+              $canvas = $getLinkCanvas(root, root.symbolicLink.indexOf(node));
+              offsetX = (ui.position.left / self.zoomFactor + node.getParent().getPosition().x) - root.getPosition().x;
+              offsetY = (ui.position.top / self.zoomFactor + node.getParent().getPosition().y) - root.getPosition().y;
+
+              drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
+            }
+            root.forEachDescendant(function(parent) {
+              if(parent.includeSymbolicLink(node)){
+                $parent = $getNode(parent);
+                $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(node));
+                offsetX = (ui.position.left / self.zoomFactor + node.getParent().getPosition().x) - parent.getPosition().x;
+                offsetY = (ui.position.top / self.zoomFactor + node.getParent().getPosition().y) - parent.getPosition().y;
+
+                drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
+              }
+            });
+            //redraw the child's node's symbolic links
+            if (!node.isLeaf()){
+              node.forEachDescendant(function(childNode){
+                //if the node is "parent" of a symbolic link
+                $parent = $getNode(childNode);
+                childNode.getSymbolicLinks().forEach(function(child) {
+                  if (!node.isDescendant(child)){
+                    $childNode = $getNode(child);
+                    $canvas = $getLinkCanvas(childNode, childNode.symbolicLink.indexOf(child));
+                    offsetX = ((node.getPosition().x - childNode.getPosition().x) - (ui.position.left / self.zoomFactor)) + child.getPosition().x - node.getParent().getPosition().x;
+                    offsetY = ((node.getPosition().y - childNode.getPosition().y) - (ui.position.top / self.zoomFactor)) + child.getPosition().y - node.getParent().getPosition().y;
+                    drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                  }
+                });
+
+                //if the node is "child" of a symbolic link
+                $childNode = $getNode(childNode);
+                if(root.includeSymbolicLink(node)){
+                  console.log("ding");
+                  $parent = $getNode(root);
+                  $canvas = $getLinkCanvas(root, root.symbolicLink.indexOf(node));
+                  offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - root.getPosition().x + node.getParent().getPosition().x;
+                  offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - root.getPosition().y + node.getParent().getPosition().y;
+
+                  drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
+                }
+                root.forEachDescendant(function(parent) {
+                  if(parent.includeSymbolicLink(childNode) && !node.isDescendant(parent)){
+                    $parent = $getNode(parent);
+                    $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(childNode));
+                    offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - parent.getPosition().x + node.getParent().getPosition().x;
+                    offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - parent.getPosition().y + node.getParent().getPosition().y;
+                    drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                  }
+                });
+              });
+            }
 
             // fire dragging event
             if (self.nodeDragging) {
@@ -478,8 +556,7 @@ mindmaps.DefaultCanvasView = function() {
       });
 
       // position and draw connection
-      drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent,
-          node.branchColor);
+      drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, node.branchColor);
       $canvas.appendTo($node);
     }
 
@@ -506,6 +583,7 @@ mindmaps.DefaultCanvasView = function() {
     // delete all DOM below
     var $node = $getNode(node);
     $node.remove();
+
   };
 
   /**
@@ -657,21 +735,29 @@ mindmaps.DefaultCanvasView = function() {
     var $canvas = $getNodeCanvas(node);
 
     drawLineCanvas($canvas, depth, offsetX, offsetY, $node, $parent, color);
+  }
 
-    console.log("la réponse est ...");
-    if (node.symbolicLink.length != 0){
-      console.log("oui");
-      console.log(node.symbolicLink.length);
-      $parent = $getNode(node);
-      offsetPX = node.getPosition().x;
-      offsetPY = node.getPosition().y;
-      for (var i = 0; i < node.symbolicLink.length; i++){
-        $canvas = $getLinkCanvas(node, i);
-        $node = $getNode(node.symbolicLink[i]);
-        /*offsetNX = node.symbolicLink[i].getPosition().x;
-        offsetNY = node.symbolicLink[i].getPosition().y;*/
-        drawLinkCanvas($canvas, depth, $parent, $node, /*offsetPX, offsetPY, offsetNX, offsetNY*/);
-      }
+  /**
+   * Redraws a node's symbolic links.
+   *
+   * @param {mindmaps.Node} node
+   * @param {String} optional color
+   */
+  function drawSymbolicLinkCanvas(node, color) {
+    color = color || node.branchColor;
+    var symbolicLink = node.symbolicLink;
+
+  //s'il est "parent" d'autres noeuds
+    $parent = $getNode(node);
+
+    for (var i = 0; i < symbolicLink.length; i++){
+      $canvas = $getLinkCanvas(node, i);
+      $node = $getNode(symbolicLink[i]);
+
+      var offsetX = symbolicLink[i].getPosition().x - node.getPosition().x;
+      var offsetY = symbolicLink[i].getPosition().y - node.getPosition().y;
+
+      drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
     }
   }
 
@@ -693,6 +779,10 @@ mindmaps.DefaultCanvasView = function() {
         drawNodeCanvas(child);
       });
     }
+
+    // redraw all link canvases
+    drawSymbolicLinkCanvas(node);
+
   };
 
   /**
@@ -756,8 +846,8 @@ mindmaps.DefaultCanvasView = function() {
       top : this.zoomFactor * node.offset.y
     });
 
-    // redraw canvas to parent
-    drawNodeCanvas(node);
+    // redraw canvases to parent
+    this.redrawNodeConnectors(node);
   };
 
   /**
@@ -814,6 +904,10 @@ mindmaps.DefaultCanvasView = function() {
           scale(child, depth + 1);
         });
       }
+
+      // redraw all symbolicLink
+      drawSymbolicLinkCanvas(node);
+
     }
   };
 

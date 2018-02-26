@@ -4,9 +4,19 @@
  * @namespace
  */
 mindmaps.Event = {
-  //Modifié
+
+  /**
+   * @event
+   * @param {mindmaps.Node} parent
+   * @param {mindmaps.Node} node
+   */
   SYMBOLIC_LINK_CREATED : "SymbolicLinkCreated",
 
+  /**
+   * @event
+   * @param {Integer} idNode
+   * @param {mindmaps.Node} parent
+   */
   SYMBOLIC_LINK_DELETED : "SymbolicLinkDeleted",
 
   /**
