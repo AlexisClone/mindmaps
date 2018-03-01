@@ -480,10 +480,11 @@ mindmaps.DefaultCanvasView = function() {
             //if the node is "parent" of a symbolic link
             $parent = $getNode(node);
             node.getSymbolicLinks().forEach(function(child) {
+                console.log("ding");
               $node = $getNode(child);
               $canvas = $getLinkCanvas(node, node.symbolicLink.indexOf(child));
-              offsetX = child.getPosition().x - (ui.position.left / self.zoomFactor + node.getParent().getPosition().x);
-              offsetY = child.getPosition().y - (ui.position.top / self.zoomFactor + node.getParent().getPosition().y);
+              offsetX = child.getPosition().x - (ui.position.left / self.zoomFactor + node.getParent().getPosition().x / self.zoomFactor);
+              offsetY = child.getPosition().y - (ui.position.top / self.zoomFactor + node.getParent().getPosition().y / self.zoomFactor);
 
               drawLinkCanvas($canvas, offsetX, offsetY, $node, $parent);
             });
@@ -515,20 +516,27 @@ mindmaps.DefaultCanvasView = function() {
                 $parent = $getNode(childNode);
                 childNode.getSymbolicLinks().forEach(function(child) {
                   if (!node.isDescendant(child)){
-                    $childNode = $getNode(child);
-                    $canvas = $getLinkCanvas(childNode, childNode.symbolicLink.indexOf(child));
-                    offsetX = ((node.getPosition().x - childNode.getPosition().x) - (ui.position.left / self.zoomFactor)) + child.getPosition().x - node.getParent().getPosition().x;
-                    offsetY = ((node.getPosition().y - childNode.getPosition().y) - (ui.position.top / self.zoomFactor)) + child.getPosition().y - node.getParent().getPosition().y;
-                    drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                    if (parent == node){
+                        $childNode = $getNode(child);
+                        $canvas = $getLinkCanvas(childNode, childNode.symbolicLink.indexOf(child));
+                        offsetX = ((node.getPosition().x - childNode.getPosition().x) - (ui.position.left / self.zoomFactor)) + child.getPosition().x - node.getParent().getPosition().x;
+                        offsetY = ((node.getPosition().y - childNode.getPosition().y) - (ui.position.top / self.zoomFactor)) + child.getPosition().y - node.getParent().getPosition().y;
+                        drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                    } else {
+                      $childNode = $getNode(child);
+                      $canvas = $getLinkCanvas(childNode, childNode.symbolicLink.indexOf(child));
+                      offsetX = ((node.getPosition().x - childNode.getPosition().x) - (ui.position.left / self.zoomFactor)) + child.getPosition().x - node.getParent().getPosition().x;
+                      offsetY = ((node.getPosition().y - childNode.getPosition().y) - (ui.position.top / self.zoomFactor)) + child.getPosition().y - node.getParent().getPosition().y;
+                      drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                    }
                   }
                 });
 
                 //if the node is "child" of a symbolic link
                 $childNode = $getNode(childNode);
-                if(root.includeSymbolicLink(node)){
-                  console.log("ding");
+                if(root.includeSymbolicLink(childNode)){
                   $parent = $getNode(root);
-                  $canvas = $getLinkCanvas(root, root.symbolicLink.indexOf(node));
+                  $canvas = $getLinkCanvas(root, root.symbolicLink.indexOf(childNode));
                   offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - root.getPosition().x + node.getParent().getPosition().x;
                   offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - root.getPosition().y + node.getParent().getPosition().y;
 
@@ -536,11 +544,19 @@ mindmaps.DefaultCanvasView = function() {
                 }
                 root.forEachDescendant(function(parent) {
                   if(parent.includeSymbolicLink(childNode) && !node.isDescendant(parent)){
-                    $parent = $getNode(parent);
-                    $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(childNode));
-                    offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - parent.getPosition().x + node.getParent().getPosition().x;
-                    offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - parent.getPosition().y + node.getParent().getPosition().y;
-                    drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                    if (parent == node){
+                      $parent = $getNode(parent);
+                      $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(childNode));
+                      offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - ui.position.left + node.getParent().getPosition().x;
+                      offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - ui.position.top + node.getParent().getPosition().y;
+                      drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                    } else {
+                      $parent = $getNode(parent);
+                      $canvas = $getLinkCanvas(parent, parent.symbolicLink.indexOf(childNode));
+                      offsetX = ((ui.position.left / self.zoomFactor) - (node.getPosition().x - childNode.getPosition().x)) - parent.getPosition().x + node.getParent().getPosition().x;
+                      offsetY = ((ui.position.top / self.zoomFactor) - (node.getPosition().y - childNode.getPosition().y)) - parent.getPosition().y + node.getParent().getPosition().y;
+                      drawLinkCanvas($canvas, offsetX, offsetY, $childNode, $parent);
+                    }
                   }
                 });
               });
