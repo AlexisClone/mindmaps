@@ -1,7 +1,7 @@
 /**
  * Creates a new ShortcutController. This object takes care of all keyboard
  * shortcuts.
- * 
+ *
  * @constructor
  */
 mindmaps.ShortcutController = function() {
@@ -13,7 +13,7 @@ mindmaps.ShortcutController = function() {
 
   /**
    * Set the event type and add namespace for later removal.
-   * 
+   *
    * @param {String} shortcut the key combination
    * @param {String} [type="keydown"]
    * @returns {String}
@@ -27,7 +27,7 @@ mindmaps.ShortcutController = function() {
    * Registers a new application wide shortcut. shortcuts can be
    * either a string or an array containing multiple possible
    * shortcuts for the same action.
-   * 
+   *
    * @param {String|Array} shortcuts
    * @param {Function} handler
    * @param {String} [type="keydown"]
@@ -54,7 +54,7 @@ mindmaps.ShortcutController = function() {
 
   /**
    * Unregisters a application shortcut.
-   * 
+   *
    * @param {String} shortcut
    * @param {String} [type="keydown"]
    */

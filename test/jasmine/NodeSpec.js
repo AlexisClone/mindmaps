@@ -128,6 +128,42 @@ describe("Node", function() {
     expect(n21.getCaption()).toEqual(newCaption);
   });
 
+  it("verify if node comment is changed", function() {
+    var count = 0;
+    var newComment = "COMMENT CHANGED";
+    root.forEachDescendant(function(child) {
+      count++;
+      child.setComment(newComment);
+    });
+
+    expect(count).toBe(7);
+    expect(n1.getComment()).toEqual(newComment);
+    expect(n2.getComment()).toEqual(newComment);
+    expect(n3.getComment()).toEqual(newComment);
+    expect(n11.getComment()).toEqual(newComment);
+    expect(n12.getComment()).toEqual(newComment);
+    expect(n21.getComment()).toEqual(newComment);
+  });
+
+
+  it("verify if node URL is changed", function() {
+    var count = 0;
+    var newURL = "URL CHANGED";
+    root.forEachDescendant(function(child) {
+      count++;
+      child.setURL(newURL);
+    });
+
+    expect(count).toBe(7);
+    expect(n1.getURL()).toEqual(newURL);
+    expect(n2.getURL()).toEqual(newURL);
+    expect(n3.getURL()).toEqual(newURL);
+    expect(n11.getURL()).toEqual(newURL);
+    expect(n12.getURL()).toEqual(newURL);
+    expect(n21.getURL()).toEqual(newURL);
+  });
+
+
   it("should detect if a node is a descendant", function() {
     // n1 should be a descendant but not the other way round
     expect(root.isDescendant(n1)).toBeTruthy();
