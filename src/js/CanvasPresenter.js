@@ -198,7 +198,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     if (distance < 50) {
       return;
     }
-<<<<<<< HEAD
     // we calculate the position relatively from the root
     var pos = new mindmaps.Point(offsetX, offsetY);
     pos.add(parent.getPosition());
@@ -226,17 +225,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         console.log("error : this symbolic link already exists");
       }
     }
-=======
-
-    // update the model
-    var node = new mindmaps.Node();
-    node.branchColor = creator.lineColor;
-    node.offset = new mindmaps.Point(offsetX, offsetY);
-    // indicate that we want to set this nodes caption after creation
-    node.shouldEditCaption = true;
-
-    mindmapModel.createNode(node, parent);
->>>>>>> 2cc53979a98b4d8090703f8386d15a4e5dfff292
   };
 
   /**
@@ -358,7 +346,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       }
     });
 
-<<<<<<< HEAD
     eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
       view.createLink(parent, node);
     });
@@ -367,8 +354,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       view.deleteLink(idNode, parent);
     });
 
-=======
->>>>>>> 2cc53979a98b4d8090703f8386d15a4e5dfff292
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {
       // select parent if we are deleting a selected node or a descendant
       var selected = mindmapModel.selectedNode;

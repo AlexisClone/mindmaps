@@ -46,7 +46,6 @@ mindmaps.action.Action.prototype = {
   }
 };
 
-<<<<<<< HEAD
 //Modifié
 /**
  *Creates a new link between two existant nodes
@@ -93,8 +92,6 @@ mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
 };
 mindmaps.action.DeleteSymbolicLinkAction.prototype = new mindmaps.action.Action();
 
-=======
->>>>>>> 2cc53979a98b4d8090703f8386d15a4e5dfff292
 /**
  * Creates a new MoveNodeAction.
  *
