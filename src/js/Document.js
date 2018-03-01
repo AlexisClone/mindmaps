@@ -1,6 +1,6 @@
 /**
  * Creates a new Document.
- * 
+ *
  * @constructor
  */
 mindmaps.Document = function() {
@@ -18,7 +18,7 @@ mindmaps.Document = function() {
 
 /**
  * Creates a new document object from a JSON string.
- * 
+ *
  * @static
  * @param {String} json
  * @returns {mindmaps.Document}
@@ -29,7 +29,7 @@ mindmaps.Document.fromJSON = function(json) {
 
 /**
  * Creates a new document object from a generic object.
- * 
+ *
  * @static
  * @param {Object} json
  * @returns {mindmaps.Document}
@@ -52,7 +52,7 @@ mindmaps.Document.fromObject = function(obj) {
 
 /**
  * Called by JSON.stringify().
- * 
+ *
  * @private
  */
 mindmaps.Document.prototype.toJSON = function() {
@@ -77,7 +77,7 @@ mindmaps.Document.prototype.toJSON = function() {
 
 /**
  * Returns a JSON representation of the object.
- * 
+ *
  * @returns {String} the json.
  */
 mindmaps.Document.prototype.serialize = function() {
@@ -95,7 +95,7 @@ mindmaps.Document.prototype.prepareSave = function() {
 
 /**
  * Sort function for Array.sort().
- * 
+ *
  * @static
  * @param {mindmaps.Document} doc1
  * @param {mindmaps.Document} doc2
@@ -113,7 +113,7 @@ mindmaps.Document.sortByModifiedDateDescending = function(doc1, doc2) {
 /**
  * Tells whether this document considerd as "new", that is has not been saved
  * yet.
- * 
+ *
  * @returns {Boolean}
  */
 mindmaps.Document.prototype.isNew = function() {
@@ -122,7 +122,7 @@ mindmaps.Document.prototype.isNew = function() {
 
 /**
  * Returns the created date.
- * 
+ *
  * @returns {Date}
  */
 mindmaps.Document.prototype.getCreatedDate = function() {
@@ -131,7 +131,7 @@ mindmaps.Document.prototype.getCreatedDate = function() {
 
 /**
  * Gets the width of the document.
- * 
+ *
  * @returns {Number}
  */
 mindmaps.Document.prototype.getWidth = function() {
@@ -140,7 +140,7 @@ mindmaps.Document.prototype.getWidth = function() {
 
 /**
  * Gets the height of the document.
- * 
+ *
  * @returns {Number}
  */
 mindmaps.Document.prototype.getHeight = function() {
