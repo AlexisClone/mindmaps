@@ -4,9 +4,6 @@
  * @constructor
  */
 mindmaps.Node = function() {
-  //Modifié
-  this.symbolicLink = [];
-
   this.id = mindmaps.Util.getId();
   this.parent = null;
   this.children = new mindmaps.NodeMap();
@@ -21,39 +18,35 @@ mindmaps.Node = function() {
       color : "#000000"
     }
   };
+
+  this.comment = {
+    text : "Description",
+    font : {
+      style : "normal",
+      weight : "normal",
+      decoration : "none",
+      /** unit: pixel */
+      size : 10,
+      color : "#000000"
+    }
+  };
+
+  this.url = {
+    text : "drichard.org",
+    font : {
+      style : "normal",
+      weight : "normal",
+      decoration : "none",
+      /** unit: pixel */
+      size : 10,
+      color : "#000000"
+    }
+  };
+
   this.offset = new mindmaps.Point();
   this.foldChildren = false;
   this.branchColor = "#000000";
 };
-
-//Modifié
-mindmaps.Node.prototype.addSymbolicLink = function(node) {
-  this.symbolicLink.push(node);
-};
-
-mindmaps.Node.prototype.getSymbolicLinks = function() {
-  return this.symbolicLink;
-};
-
-mindmaps.Node.prototype.removeSymbolicLink = function(nodeId) {
-  delete this.symbolicLink[nodeId];
-};
-
-//mindmaps.Util.distance(this.getPosition().x - offsetX, this.getPosition().y - offsetY) < 50
-mindmaps.Node.prototype.isNearOther = function(offsetX, offsetY) {
-  var listnoeud = [];
-  listnoeud.push(this);
-  this.forEachDescendant(function(node){
-    listnoeud.push(node);
-  });
-  for (var i= 0; i < listnoeud.length; i++){
-    if (mindmaps.Util.distance(listnoeud[i].getPosition().x - offsetX, listnoeud[i].getPosition().y - offsetY) < 50){
-      return listnoeud[i];
-    }
-  }
-  return  null;
-};
-
 
 /**
  * Creates a deep copy of this node, where all nodes have a new IDs.
@@ -72,6 +65,19 @@ mindmaps.Node.prototype.clone = function() {
     size : this.text.font.size,
     color : this.text.font.color
   };
+
+  var commentary = {
+    caption : this.text.caption
+  };
+  var font = {
+    weight : this.text.font.weight,
+    style : this.text.font.style,
+    decoration : this.text.font.decoration,
+    size : this.text.font.size,
+    color : this.text.font.color
+  };
+
+
   text.font = font;
   clone.text = text;
   clone.offset = this.offset.clone();
@@ -106,6 +112,8 @@ mindmaps.Node.fromObject = function(obj) {
   var node = new mindmaps.Node();
   node.id = obj.id;
   node.text = obj.text;
+  node.commentary = obj.commentary;
+
   node.offset = mindmaps.Point.fromObject(obj.offset);
   node.foldChildren = obj.foldChildren;
   node.branchColor = obj.branchColor;
@@ -256,6 +264,8 @@ mindmaps.Node.prototype.getDepth = function() {
   return depth;
 };
 
+
+
 /**
  * Gets the children of the node. Traverses the whole sub tree if recursive is
  * true.
@@ -291,7 +301,7 @@ mindmaps.Node.prototype.forEachChild = function(func) {
 
 /**
  * Iterator. Traverses all child nodes recursively.
- *child
+ *
  * @param {Function} func
  */
 mindmaps.Node.prototype.forEachDescendant = function(func) {
@@ -318,6 +328,47 @@ mindmaps.Node.prototype.setCaption = function(caption) {
 mindmaps.Node.prototype.getCaption = function() {
   return this.text.caption;
 };
+
+/**
+ * Gets the comment for the node.
+ *
+ * @returns {String}
+ */
+mindmaps.Node.prototype.getComment = function() {
+  return this.comment.text;
+};
+
+
+
+/**
+ * Sets the comment for the node
+ *
+ * @param {String} comment
+ */
+mindmaps.Node.prototype.setComment = function(comment) {
+  this.comment.text = comment;
+};
+
+
+/**
+ * Gets the URL for the node.
+ *
+ * @returns {String}
+ */
+mindmaps.Node.prototype.getURL = function() {
+  return this.url.text;
+};
+
+
+/**
+ * Sets the URL for the node
+ *
+ * @param {String} url
+ */
+mindmaps.Node.prototype.setURL = function(url) {
+  this.url.text = url;
+};
+
 
 /**
  * Tests (depth-first) whether the other node is a descendant of this node.

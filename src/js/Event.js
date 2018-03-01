@@ -4,11 +4,6 @@
  * @namespace
  */
 mindmaps.Event = {
-  //Modifié
-  SYMBOLIC_LINK_CREATED : "SymbolicLinkCreated",
-
-  SYMBOLIC_LINK_DELETED : "SymbolicLinkDeleted",
-
   /**
    * @event
    * @param {mindmaps.Document} document
@@ -51,6 +46,12 @@ mindmaps.Event = {
    * @param {mindmaps.Node} node
    */
   NODE_TEXT_CAPTION_CHANGED : "NodeTextCaptionChangedEvent",
+
+  /**
+   * @event
+   * @param {mindmaps.Node} node
+   */
+  NODE_COMMENT_CHANGED : "NodeCommentChangedEvent",
 
   /**
    * Some parameter of the node font attribute has changed.

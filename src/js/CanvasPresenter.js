@@ -19,7 +19,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
    */
   this.init = function() {
     var editCaptionCommand = commandRegistry
-        .get(mindmaps.EditNodeCaptionCommand);
+.get(mindmaps.EditNodeCaptionCommand);
     editCaptionCommand.setHandler(this.editNodeCaption.bind(this));
 
     var toggleNodeFoldedCommand = commandRegistry
@@ -37,6 +37,7 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
       node = mindmapModel.selectedNode;
     }
     view.editNodeCaption(node);
+
   };
 
   /**
@@ -64,8 +65,11 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
     // deselect old node
     if (oldSelectedNode) {
+      view.enleverDescription(oldSelectedNode);
       view.unhighlightNode(oldSelectedNode);
+      view.redrawNodeConnectors(oldSelectedNode);
     }
+    view.afficherDescription(selectedNode);
     view.highlightNode(selectedNode);
   };
 
@@ -134,6 +138,17 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     view.editNodeCaption(node);
   };
 
+
+  /**
+   * View callback: Go into edit mode when node was double clicked.
+   *
+   * @ignore
+   */
+  view.commentDoubleClicked = function(node) {
+    console.log("CanvasPresenter.js - commentDoubleClicked()");
+    view.editNodeComment(node);
+  };
+
   // view.nodeDragging = function() {
   // };
 
@@ -183,32 +198,15 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     if (distance < 50) {
       return;
     }
-    // we calculate the position relatively from the root
-    var pos = new mindmaps.Point(offsetX, offsetY);
-    pos.add(parent.getPosition());
-    //if the creator is in a 50px radius of an other node, we create a link, else we create a node
-    var nearOther = false;
-    var tempNode = parent.getRoot();
-    if (tempNode.isNearOther(pos.x, pos.y) != null){
-      nearOther = true;
-    }
 
+    // update the model
+    var node = new mindmaps.Node();
+    node.branchColor = creator.lineColor;
+    node.offset = new mindmaps.Point(offsetX, offsetY);
+    // indicate that we want to set this nodes caption after creation
+    node.shouldEditCaption = true;
 
-
-    if (!nearOther){
-      // update the model
-      var node = new mindmaps.Node();
-      node.branchColor = creator.lineColor;
-      node.offset = new mindmaps.Point(offsetX, offsetY);
-      // indicate that we want to set this nodes caption after creation
-      node.shouldEditCaption = true;
-
-      mindmapModel.createNode(node, parent);
-    } else {
-      //var node = the targeted node
-      console.log("on crée un lien");
-      mindmapModel.createSymbolicLink(parent, tempNode.isNearOther(pos.x, pos.y));
-    }
+    mindmapModel.createNode(node, parent);
   };
 
   /**
@@ -221,6 +219,8 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
    */
   view.nodeCaptionEditCommitted = function(node, str) {
     // avoid whitespace only strings
+
+
     var str = $.trim(str);
     if (!str) {
       return;
@@ -228,6 +228,18 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
 
     view.stopEditNodeCaption();
     mindmapModel.changeNodeCaption(node, str);
+  };
+
+  view.nodeCommentEditCommitted = function(node, str) {
+    // avoid whitespace only strings
+    //var str = $.trim(str);
+    console.log("CanvasPresenter.js nodeCommentEditCommitted()");
+    if (!str) {
+      return;
+    }
+
+    view.stopEditNodeComment();
+    mindmapModel.changeNodeComment(node, str);
   };
 
   this.go = function() {
@@ -277,6 +289,17 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
     eventBus.subscribe(mindmaps.Event.NODE_TEXT_CAPTION_CHANGED, function(
         node) {
       view.setNodeText(node, node.getCaption());
+      console.log("subscribe = "+node.getCaption());
+      // redraw node in case height has changed
+      // TODO maybe only redraw if height has changed
+      view.redrawNodeConnectors(node);
+    });
+
+
+    eventBus.subscribe(mindmaps.Event.NODE_COMMENT_CHANGED, function(
+        node) {
+      console.log("CanvasPresenter.js - subscribe - NODE_COMMENT_CHANGED");
+      view.setCommentText(node, node.getComment());
 
       // redraw node in case height has changed
       // TODO maybe only redraw if height has changed
@@ -303,12 +326,6 @@ mindmaps.CanvasPresenter = function(eventBus, commandRegistry, mindmapModel,
         creator.attachToNode(node);
         view.editNodeCaption(node);
       }
-    });
-
-    eventBus.subscribe(mindmaps.Event.SYMBOLIC_LINK_CREATED, function(parent, node) {
-      var depth = parent.getDepth();
-      console.log("subscribe : "+parent.getSymbolicLinks().length);
-      view.createLink(depth, parent, node);
     });
 
     eventBus.subscribe(mindmaps.Event.NODE_DELETED, function(node, parent) {
