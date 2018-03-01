@@ -46,6 +46,7 @@ mindmaps.action.Action.prototype = {
   }
 };
 
+<<<<<<< HEAD
 //Modifié
 /**
  *Creates a new link between two existant nodes
@@ -92,6 +93,8 @@ mindmaps.action.DeleteSymbolicLinkAction = function(parent, node) {
 };
 mindmaps.action.DeleteSymbolicLinkAction.prototype = new mindmaps.action.Action();
 
+=======
+>>>>>>> 2cc53979a98b4d8090703f8386d15a4e5dfff292
 /**
  * Creates a new MoveNodeAction.
  *
@@ -277,7 +280,31 @@ mindmaps.action.ChangeNodeCaptionAction = function(node, caption) {
     return new mindmaps.action.ChangeNodeCaptionAction(node, oldCaption);
   };
 };
+
+
 mindmaps.action.ChangeNodeCaptionAction.prototype = new mindmaps.action.Action();
+
+
+mindmaps.action.ChangeNodeCommentAction = function(node, comment) {
+  var oldComment = node.getComment();
+  console.log("Action.js - ChangeNodeCommentAction");
+
+  this.execute = function() {
+    console.log("Action.js - ChangeNodeCommentAction execute()");
+    // dont update if nothing has changed
+    if (oldComment === comment) {
+      return false;
+    }
+    node.setComment(comment);
+  };
+  console.log("this.event = "+this.event);
+  this.event = [ mindmaps.Event.NODE_COMMENT_CHANGED, node ];
+  console.log("this.event = "+this.event);
+  this.undo = function() {
+    return new mindmaps.action.ChangeNodeCommentAction(node, oldComment);
+  };
+};
+mindmaps.action.ChangeNodeCommentAction.prototype = new mindmaps.action.Action();
 
 /**
  * Creates a new ChageNodeFontSizeAction.

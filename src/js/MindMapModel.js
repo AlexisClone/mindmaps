@@ -69,6 +69,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
 
     var deleteNodeCommand = commandRegistry.get(mindmaps.DeleteNodeCommand);
     deleteNodeCommand.setHandler(this.deleteNode.bind(this));
+    console.log("this = "+this.deleteNode.bind(this));
 
     eventBus.subscribe(mindmaps.Event.DOCUMENT_CLOSED, function() {
       createNodeCommand.setEnabled(false);
@@ -114,20 +115,6 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
     } else {
       var action = new mindmaps.action.CreateNodeAction(node, parent, map);
     }
-
-    this.executeAction(action);
-  };
-
-  /**
-   *
-   * Creates a new symbolic link between two nodes, can't be invokes without arguments.
-   *
-   * @param {mindmaps.Node} parent the node where the link comes from
-   * @param {mindmaps.Node} node the targeted node
-   */
-  this.createSymbolicLink = function(parent, node){
-
-    var action = new mindmaps.action.CreateSymbolicLinkAction(parent, node);
 
     this.executeAction(action);
   };
@@ -183,6 +170,23 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
   };
 
   /**
+   * Changes the caption for the passed node or for the selected one if node
+   * is null.
+   *
+   * @param {mindmaps.Node} node
+   * @param {String} comment
+   */
+  this.changeNodeComment = function(node, comment) {
+    console.log("MindMapModel.js changeNodeComment()");
+    if (!node) {
+      node = this.selectedNode;
+    }
+
+    var action = new mindmaps.action.ChangeNodeCommentAction(node, comment);
+    this.executeAction(action);
+  };
+
+  /**
    * Executes a node action. An executed action might raise an event over the
    * event bus and cause an undo event to be emitted via
    * MindMapModel#undoAction.
@@ -192,6 +196,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
   this.executeAction = function(action) {
     // a composite action consists of multiple actions which are
     // processed individually.
+    console.log("MindMapsModel executeAction()");
     if (action instanceof mindmaps.action.CompositeAction) {
       var execute = this.executeAction.bind(this);
       action.forEachAction(execute);
@@ -211,6 +216,7 @@ mindmaps.MindMapModel = function(eventBus, commandRegistry, undoController) {
         action.event = [ action.event ];
       }
       eventBus.publish.apply(eventBus, action.event);
+      console.log("MindMapsModel publish");
     }
 
     // register undo function if available
